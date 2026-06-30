@@ -174,13 +174,13 @@ Reads from `raw_data.raw_supplyChain` and applies:
 - Country/state standardization and mojibake repair.
 - `product_description` (100% null) replaced with placeholder text.
 
-<img src="Screen%20shots/Local/DBT%20Initial%20Load.png" alt="DBT Initial Load" width="900">
+<img src="Screen%20shots/Local/DBT%20Staging%20Initial%20Load.png" alt="DBT Staging Initial Load" width="900">
 
-#### Marts Layer — Dimensions & Facts
+#### DWH Layer — Dimensions & Facts
 
 17 models total (14 dimensions + 3 facts), materialized as **tables** for query performance. All follow the same pattern: deduplicate on natural keys → generate a hashed surrogate key via `dbt_utils.generate_surrogate_key()` → incremental merge on the surrogate key.
 
-<!-- TODO: Add dbt marts run screenshot here -->
+<img src="Screen%20shots/Local/DBT%20Initial%20Load.png" alt="DBT DWH Initial Load" width="900">
 
 #### dbt Lineage
 
