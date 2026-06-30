@@ -2,8 +2,6 @@
 
 End-to-end supply chain analytics Solution spanning batch ETL, real-time streaming, dual-cloud data warehousing (Snowflake & Microsoft Fabric), a conformed star-schema data model, an interactive Power BI layer, Agentic AI, and an AI-powered conversational analyst delivered through a cross-platform Flutter application.
 
-<img src="Screen%20shots/Local/Solution%20Architecture.png" alt="System Architecture" width="900">
-
 ---
 
 ## Table of Contents
@@ -39,23 +37,23 @@ This project builds a fully automated, dual-cloud data platform that ingests, tr
 
 | Pillar | Description |
 |---|---|
-| **Batch ETL** (AWS & Fabric) | A nightly pipeline ingests raw CSV data through AWS S3 → Snowflake, or through a Microsoft Fabric Lakehouse → Warehouse, then transforms it through dbt into a conformed star-schema data mart. |
-| **Real-Time Streaming** | Apache Kafka (AWS path) and Azure Service Bus + Fabric Eventstream (Fabric path) capture new orders from a live API and feed them into the same raw table within seconds. |
+| **Batch ETL** (Local & Fabric) | pipelines that ingests raw CSV data through AWS S3 → Snowflake, or through a Microsoft Fabric Lakehouse → Warehouse, then transforms it through dbt into a conformed star-schema data mart. |
+| **Real-Time Streaming** | Apache Kafka (Local path) and Azure Service Bus + Fabric Eventstream (Fabric path) capture new orders from a live API and feed them into the same raw table within seconds. |
 | **Interactive BI Dashboard** | A Power BI semantic model surfaces supply-chain KPIs — OTIF %, late-delivery risk, revenue, and inventory movements — through the shared star schema built by dbt. |
-| **AI Analyst & Mobile App** | A Flutter app lets business users submit real-time orders and ask supply-chain questions in natural language; an n8n AI agent translates questions into SQL, queries Snowflake, and returns charts and text instantly. |
+| **AI Analyst & Mobile App** | An n8n AI agent translates questions into SQL, queries Snowflake, and returns charts and text instantly; A Flutter app lets business users submit real-time orders and ask supply-chain questions in natural language. |
 
 ## High-Level Architecture
 
 The platform is organized into parallel ingestion pipelines (batch and streaming, on two cloud platforms) that share a single dbt transformation project and converge on a unified Power BI semantic model. A final cross-platform CDC sync keeps the Fabric Warehouse and Snowflake aligned.
 
-<!-- TODO: Add high-level architecture diagram here -->
+<img src="Screen%20shots/Local/Solution%20Architecture.png" alt="System Architecture" width="900">
 
 | Stage | Layer | Description |
 |---|---|---|
-| 1 | Batch Ingestion (AWS) | Local CSV → AWS S3 |
-| 2 | Batch Ingestion (AWS) | AWS S3 → Snowflake raw table |
-| 3 | Transformation | Snowflake raw → dbt staging → dbt marts (dimensions & facts) |
-| 4 | Streaming (AWS) | Live API → Kafka → S3 → Snowflake raw table |
+| 1 | Batch Ingestion (Local) | Local CSV → AWS S3 |
+| 2 | Batch Ingestion (Local) | AWS S3 → Snowflake raw table |
+| 3 | Transformation | Snowflake raw → dbt staging → dbt DWH (dimensions & facts) |
+| 4 | Streaming (Local) | Live API → Kafka → S3 → Snowflake raw table |
 | 5 | Batch Ingestion (Fabric) | CSV → Lakehouse → Warehouse → Fabric dbt job (gold layer) |
 | 6 | Streaming (Fabric) | Live API → Notebook → Service Bus → Eventstream → Lakehouse → pipeline → Warehouse → dbt |
 | 7 | Cross-Platform Sync | Fabric Warehouse → CDC → Snowflake Warehouse |
