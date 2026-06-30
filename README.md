@@ -275,7 +275,7 @@ A Fabric-native equivalent of the Kafka streaming path, using Azure Service Bus 
 
 A final integration step consolidates the two parallel platforms (Fabric Warehouse and Snowflake) into a unified data source. This pipeline uses **Change Data Capture (CDC)** to identify and propagate newly inserted and updated records from the Fabric Warehouse to the Snowflake Warehouse, ensuring data consistency and synchronization across both platforms.
 
-<img src="Screen%20shots/Fabric/CDC%20Pipeline.png" alt="CDC Pipeline" width="900">
+<img src="Screen%20shots/Fabric/CDC%20Pipleine.png" alt="CDC Pipeline" width="900">
 
 The pipeline runs a `Copy data` activity for each conformed dimension and fact table — `CDC_Dim_category`, `CDC_Dim_customer`, `CDC_Dim_customer_geography`, `CDC_Dim_Date`, `CDC_Dim_delivery_status`, `CDC_Dim_Department`, `CDC_Dim_movement_type`, `CDC_Dim_order`, `CDC_Dim_Order_Geography`, `CDC_Dim_Order_Status`, `CDC_Dim_Payment`, `CDC_Dim_Product`, `CDC_Dim_shipping_mode`, `CDC_Dim_warehouse`, `CDC_fact_inventory_movement`, `CDC_Fact_order_item`, `CDC_Fact_shipping_performance` — detecting and propagating only inserted/updated rows from the Fabric Warehouse into their Snowflake counterparts.
 
