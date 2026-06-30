@@ -180,13 +180,13 @@ Reads from `raw_data.raw_supplyChain` and applies:
 
 17 models total (14 dimensions + 3 facts), materialized as **tables** for query performance. All follow the same pattern: deduplicate on natural keys → generate a hashed surrogate key via `dbt_utils.generate_surrogate_key()` → incremental merge on the surrogate key.
 
-<img src="Screen%20shots/Local/DBT%20Initial%20Load.png" alt="DBT DWH Initial Load" width="900">
+<img src="Screen%20shots/Local/DBT%20DWH%20Initial%20Load.png" alt="DBT DWH Initial Load" width="900">
 
 #### dbt Lineage
 
 `raw_data.raw_supplyChain` → `stg_supply_chain` → fans out to all 14 dimensions in parallel → `dim_order` (built last, depends on most other dimensions for FK resolution) → 3 fact tables (built last, after all dimensions complete).
 
-<!-- TODO: Add dbt lineage graph screenshot here -->
+<img src="Screen%20shots/Local/DBT%20Initial%20Load.png" alt="dbt Lineage" width="900">
 
 ### Airflow DAG Orchestration
 
