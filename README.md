@@ -2,7 +2,7 @@
 
 End-to-end supply chain analytics Solution spanning batch ETL, real-time streaming, dual-cloud data warehousing (Snowflake & Microsoft Fabric), a conformed star-schema data model, an interactive Power BI layer, Agentic AI, and an AI-powered conversational analyst delivered through a cross-platform Flutter application.
 
-<img src="Screen%20shots/Local/Solution%20Architecture.png" alt="System Architecture" width="400">
+<img src="Screen%20shots/Local/Solution%20Architecture.png" alt="System Architecture" width="800">
 
 ---
 
