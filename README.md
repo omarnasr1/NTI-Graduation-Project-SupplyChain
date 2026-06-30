@@ -186,7 +186,7 @@ Reads from `raw_data.raw_supplyChain` and applies:
 
 `raw_data.raw_supplyChain` → `stg_supply_chain` → fans out to all 14 dimensions in parallel → `dim_order` (built last, depends on most other dimensions for FK resolution) → 3 fact tables (built last, after all dimensions complete).
 
-<img src="Screen%20shots/Local/DBT%20Initial%20Load.png" alt="dbt Lineage" width="900">
+<img src="Screen%20shots/Local/dbt%20Lineage.png" alt="dbt Lineage" width="900">
 
 ### Airflow DAG Orchestration
 
