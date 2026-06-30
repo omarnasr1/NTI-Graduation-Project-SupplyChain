@@ -200,6 +200,8 @@ DAG: `dags/my_dag.py` — `start_date=2026-06-01`, `schedule=None`, `catchup=Fal
 | `dbt_marts_run` | `BashOperator`: `dbt run --select path:models/marts --profiles-dir .` — builds all 14 dimensions and 3 facts. |
 | `dbt_marts_test` | `BashOperator`: `dbt test --select path:models/marts --profiles-dir .` — validates `unique`, `not_null`, and referential integrity constraints. |
 
+<img src="Screen%20shots/Local/Airflow%20Dag.png" alt="Airflow Dag" width="900">
+
 ---
 
 ## Pipeline 2 — Real-Time Streaming (Kafka)
@@ -220,7 +222,7 @@ Parallel to the batch path, captures new orders as they arrive using Apache Kafk
 - Uses a delivery-report callback to confirm successful delivery (or log failures).
 - Handles graceful shutdown on keyboard interrupt, flushing pending messages before closing.
 
-<!-- TODO: Add producer running screenshot here -->
+<img src="Screen%20shots/Local/Producer.png" alt="Producer" width="900">
 
 ### Consumer (`consumer.py` / `tracker.py`)
 
@@ -231,7 +233,7 @@ Parallel to the batch path, captures new orders as they arrive using Apache Kafk
 - Immediately loads the uploaded file into `raw_supplyChain` via `COPY INTO` (`snowflake_loader.py`) — same external stage as the batch path.
 - Deletes the local temporary CSV once upload and load complete.
 
-<!-- TODO: Add consumer running screenshot here -->
+<img src="Screen%20shots/Local/Consumer.png" alt="Consumer" width="900">
 
 **Role in pipeline:** Live API → Kafka → per-order CSV → S3 → Snowflake raw table. Near-real-time order ingestion alongside the bulk historical batch load. Both paths converge on `raw_supplyChain`, feeding the shared dbt project.
 
