@@ -287,13 +287,13 @@ The pipeline runs a `Copy data` activity for each conformed dimension and fact t
 
 The Power BI dashboard connects directly to the Snowflake analytical layer (or Fabric Warehouse) and provides interactive visibility into four supply-chain domains. The model uses a mixed storage mode (Import + DirectQuery). At the time of writing, the semantic model and its relationships are built; report visuals are a planned next step.
 
-<img src="Power%20BI/power%20BI%20page1.png" alt="power BI page1.png" width="900">
+<img src="Power%20BI/power%20BI%20page1.png" alt="power BI page1" width="900">
 ---
-<img src="Power%20BI/power%20BI%20page2.png" alt="power BI page2.png" width="900">
+<img src="Power%20BI/power%20BI%20page2.png" alt="power BI page2" width="900">
 ---
-<img src="Power%20BI/power%20BI%20page3.png" alt="power BI page3.png" width="900">
+<img src="Power%20BI/power%20BI%20page3.png" alt="power BI page3" width="900">
 ---
-<img src="Power%20BI/power%20BI%20page4.png" alt="power BI page4.png" width="900">
+<img src="Power%20BI/power%20BI%20page4.png" alt="power BI page4" width="900">
 
 ### Semantic Model Relationships
 
@@ -335,7 +335,7 @@ The Power BI dashboard connects directly to the Snowflake analytical layer (or F
 
 A cross-platform enterprise dashboard running on mobile, tablet, and desktop (web), built with Flutter. Provides two core capabilities: an Order Entry module for submitting real-time supply-chain transactions, and an AI Analyst chatbot for natural-language querying of the Snowflake data warehouse.
 
-<!-- TODO: Add app screenshots here -->
+<img src="AI%20Agent/app.png" alt="app" width="900">
 
 ### Responsive Design System
 
@@ -358,7 +358,7 @@ Users ask supply-chain questions in plain English. The app maintains multiple in
 
 The n8n workflow receives the user's question via webhook, routes it through an AI Agent node (Gemini LLM), executes the generated SQL on Snowflake, and returns a structured JSON response with `bot_message`, `chart_type`, and `chart_data`.
 
-<!-- TODO: Add n8n workflow screenshot here -->
+<img src="AI%20Agent/n8n%20workflow.png" alt="n8n workflow" width="900">
 
 | `chart_type` | Rendered Output |
 |---|---|
