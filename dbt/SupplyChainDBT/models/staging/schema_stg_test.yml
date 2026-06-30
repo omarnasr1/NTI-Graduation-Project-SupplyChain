@@ -1,0 +1,267 @@
+# schema_stg_test.yml: 
+version: 2
+
+models:
+  - name: stg_supply_chain
+    description: >
+      Cleansed staging view on top of raw_data.raw_supplyChain. Applies type
+      casting, trimming, country/state corrections, and character-level
+      mojibake repair on order location fields.
+    columns:
+
+      - name: order_type
+        description: Shipping/order type from source system.
+        tests:
+          - not_null
+
+      - name: days_for_shipping_real
+        description: Actual number of days taken to ship the order.
+        tests:
+          - not_null
+
+      - name: days_for_shipment_scheduled
+        description: Scheduled number of days for shipment.
+        tests:
+          - not_null
+
+      - name: benefit_per_order
+        description: Profit/loss benefit per order, cast to decimal(18,2). Can be negative.
+        tests:
+          - not_null
+
+      - name: sales_per_customer
+        description: Sales value per customer, cast to decimal(18,2).
+        tests:
+          - not_null
+
+      - name: delivery_status
+        description: Status of the delivery (e.g. on time, late, advance).
+        tests:
+          - not_null
+
+      - name: late_delivery_risk
+        description: Binary flag (0/1) indicating risk of late delivery.
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]
+
+      - name: category_name
+        description: Trimmed product category name.
+        tests:
+          - not_null
+
+      - name: customer_city
+        description: Trimmed customer city name.
+        tests:
+          - not_null
+
+      - name: customer_country
+        description: Customer country name, with 'EE. UU.' standardized to 'United States'.
+        tests:
+          - not_null
+
+      - name: customer_email
+        description: Masked/placeholder email value from source, not usable for real PII analysis.
+        tests:
+          - not_null
+
+      - name: customer_fname
+        description: Trimmed customer first name.
+        tests:
+          - not_null
+
+      - name: customer_lname
+        description: Trimmed customer last name. Source contains some null values.
+
+      - name: customer_password
+        description: Masked/placeholder password value from source, not usable for auth analysis.
+        tests:
+          - not_null
+
+      - name: customer_segment
+        description: Customer segment classification (e.g. Consumer, Corporate, Home Office).
+        tests:
+          - not_null
+
+      - name: customer_state
+        description: >
+          Customer state abbreviation. Rows where source contained numeric
+          values instead of a state code are set to null.
+
+      - name: customer_street
+        description: Trimmed customer street address.
+        tests:
+          - not_null
+
+      - name: customer_zipcode
+        description: Customer zip code. Source contains a small number of null values.
+
+      - name: department_name
+        description: Trimmed department name.
+        tests:
+          - not_null
+
+      - name: latitude
+        description: Order/customer latitude coordinate.
+        tests:
+          - not_null
+
+      - name: longitude
+        description: Order/customer longitude coordinate.
+        tests:
+          - not_null
+
+      - name: market
+        description: Trimmed market region name.
+        tests:
+          - not_null
+
+      - name: order_city
+        description: >
+          Order city name. Known mojibake byte-sequences are repaired:
+          'ï؟½' is replaced with 'ã', and bare '?' is replaced with '@'.
+          This is a best-effort character repair and may not cover every
+          corruption pattern present in the source.
+        tests:
+          - not_null
+
+      - name: order_country
+        description: >
+          Order country name. Same mojibake repair applied as order_city.
+        tests:
+          - not_null
+
+      - name: order_date
+        description: Date the order was placed, cast to date type.
+        tests:
+          - not_null
+
+      - name: order_id
+        description: Unique identifier for the order.
+
+      - name: order_item_discount
+        description: Discount amount applied to the order item, cast to decimal(18,2).
+
+      - name: order_item_discount_rate
+        description: Discount rate applied to the order item, cast to decimal(18,4).
+
+      - name: order_item_id
+        description: Unique identifier for the order line item.
+
+      - name: order_item_product_price
+        description: Product price at time of order, cast to decimal(18,2).
+        tests:
+          - not_null
+
+      - name: order_item_profit_ratio
+        description: Profit ratio for the order item, cast to decimal(18,4).
+
+      - name: order_item_quantity
+        description: Quantity of the product ordered.
+        tests:
+          - not_null
+
+      - name: sales
+        description: Total sales value, cast to decimal(18,2).
+        tests:
+          - not_null
+
+      - name: order_item_total
+        description: Total value of the order item, cast to decimal(18,2).
+        tests:
+          - not_null
+
+      - name: order_profit_per_order
+        description: Profit per order, cast to decimal(18,2). Can be negative.
+
+      - name: order_region
+        description: Trimmed order region name.
+        tests:
+          - not_null
+
+      - name: order_state
+        description: >
+          Order state name. Same mojibake repair applied as order_city.
+        tests:
+          - not_null
+
+      - name: order_status
+        description: Trimmed order status.
+        tests:
+          - not_null
+
+      - name: order_zipcode
+        description: >
+          Order zip code. Source contains a large number of null values
+          (~155,679 rows).
+
+      - name: product_description
+        description: >
+          Product description. Source is 100% null; replaced with the
+          placeholder value 'No description available'.
+        tests:
+          - not_null
+
+      - name: product_image
+        description: Trimmed product image URL. Source URLs are known to be broken/unusable.
+
+      - name: product_name
+        description: Trimmed product name.
+        tests:
+          - not_null
+
+      - name: product_price
+        description: Product price, cast to decimal(18,2).
+        tests:
+          - not_null
+
+      - name: product_status
+        description: >
+          Raw product status code from source. Constant value of 0 across
+          all rows (degenerate dimension).
+
+      - name: shipping_date
+        description: Date the order was shipped, cast to date type.
+        tests:
+          - not_null
+
+      - name: shipping_mode
+        description: Trimmed shipping mode (e.g. Standard Class, First Class).
+        tests:
+          - not_null
+
+      - name: movement_date
+        description: Date of the inventory movement, cast to date type.
+
+      - name: quantity_moved
+        description: Quantity moved in the inventory transaction.
+
+      - name: unit_cost_at_movement
+        description: Unit cost at the time of the inventory movement, cast to decimal(18,2).
+
+      - name: stock_on_hand_after_movement
+        description: Stock level remaining after the movement.
+
+      - name: movement_type_name
+        description: Trimmed name of the movement type.
+
+      - name: movement_direction
+        description: Trimmed direction of the inventory movement (e.g. in/out).
+
+      - name: warehouse_name
+        description: Trimmed warehouse name.
+
+      - name: warehouse_type
+        description: Trimmed warehouse type.
+
+      - name: warehouse_city
+        description: Trimmed warehouse city.
+
+      - name: warehouse_country
+        description: Trimmed warehouse country.
+
+      - name: warehouse_capacity
+        description: Capacity of the warehouse.
+
+      

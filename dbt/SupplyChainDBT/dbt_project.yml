@@ -1,0 +1,25 @@
+name: 'SupplyChainDBT'
+version: '1.0.0'
+
+
+profile: 'SupplyChainDBT'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:         
+  - "target"
+  - "dbt_packages"
+
+models:
+  SupplyChainDBT:
+    staging:
+      +schema: staging
+      +materialized: view
+    DWH:
+      +schema: marts
+      +materialized: table
