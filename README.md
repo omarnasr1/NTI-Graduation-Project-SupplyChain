@@ -382,41 +382,58 @@ The n8n workflow receives the user's question via webhook, routes it through an 
 ## Directory Structure
 
 ```
-dags/                                  # Airflow DAG definitions
-└── my_dag.py                          # Main pipeline DAG
-
-include/scripts/                       # Custom Python helpers
-└── check_raw_SupplyChain.py           # Raw data health check
-
-dbt/SupplyChainDBT/                    # dbt project root
-├── models/staging/                    # Staging views (stg_supply_chain.sql)
-├── models/marts/                      # 17 dimension & fact models
-├── dbt_project.yml                    # Project configuration
-├── profiles.yml                       # Snowflake connection profile
-└── packages.yml                       # dbt_utils dependency
-
-Source_to_snowflake_Scripts/           # Raw ingestion scripts
-├── 1.To_S3.py                         # Upload CSV to S3
-└── 2.from_S3_to_Snowflake.py          # COPY INTO Snowflake
-
-Data/                                  # Source dataset
-└── DataCoSupplyChainDatasetResult.csv
-
-producer.py                            # Kafka producer (API → Kafka)
-tracker.py / consumer.py               # Kafka consumer (Kafka → S3 → Snowflake)
-s3_utils.py                            # S3 upload helper
-snowflake_loader.py                    # Snowflake COPY INTO helper
-docker-compose.yaml                    # Kafka broker (KRaft mode)
-requirements.txt                       # Python dependencies
-
-fabric/                                # Microsoft Fabric assets
-├── notebooks/                         # SC_Notebook (streaming producer)
-├── pipelines/                         # Bronze/Silver/Gold + CDC sync pipelines
-└── eventstream/                       # Supply_Chain_ES configuration
-
-flutter_app/                           # Flutter mobile/web application
-n8n/                                   # n8n AI agent workflow export
-powerbi/                               # Power BI semantic model (.pbix)
+NTI-Graduation-Project-SupplyChain/
+├── dags/                                   # Airflow DAG definitions
+│   └── my_dag.py                           # Main pipeline DAG
+├── include/scripts/                        # Custom Python helpers
+│   └── check_raw_SupplyChain.py            # Raw data health check
+├── .astro/                                 # Astronomer CLI project config
+│   ├── config.yaml
+│   ├── dag_integrity_exceptions.txt
+│   └── test_dag_integrity_default.py
+├── tests/dags/
+│   └── test_dag_example.py
+├── dbt/SupplyChainDBT/                     # dbt project root
+│   ├── models/staging/                     # stg_supply_chain.sql + schema_stg_test.yml
+│   ├── models/DWH/                         # 14 dims + 3 facts + schema_marts_test.yml
+│   ├── models/sources.yml
+│   ├── macros/generate_schema_name.sql
+│   ├── dbt_project.yml
+│   ├── packages.yml
+│   ├── package-lock.yml
+│   └── .user.yml                           # (no profiles.yml committed)
+├── Source_to_snowflake_Scripts/            # Raw ingestion scripts
+│   ├── 1.To_S3.py                          # Upload CSV to S3
+│   └── 2.from_S3_to_Snowflake.py           # COPY INTO Snowflake
+├── Kafka Streaming/                        # ← these live in a subfolder, not repo root
+│   ├── producer.py
+│   ├── consumer.py
+│   ├── s3_utils.py
+│   ├── snowflake_loader.py
+│   └── docker-compose.yaml
+├── Data/
+│   └── Link of kagle dataset.txt           # link only — raw CSV is not committed
+├── Microsoft Fabric/
+│   └── Screen shots           # screen shot of the project
+├── Power BI/                              
+│   ├── Supply Chain New.pbix
+│   ├── Semantic model.png
+│   └── power BI page1–4.png
+├── AI Agent/                              
+│   ├── supplyApp.zip                       # Flutter app, zipped
+│   ├── n8n workflow.png
+│   ├── chatbot.png
+│   └── app.png
+├── Documetnation and presentaion/          
+│   ├── Supply_Chain_Intelligence_Platform.pptx
+│   └── Supply_Chain_Platform_Documentation_v2.docx
+├── Screen shots/
+│   ├── Local/   (8 architecture/DAG/dbt screenshots)
+│   └── Fabric/  (4 screenshots)
+├── Dockerfile
+├── airflow_settings.yaml
+├── packages.txt
+└── requirements.txt
 ```
 
 > Update this tree to match the actual repository layout before publishing.
@@ -432,7 +449,7 @@ powerbi/                               # Power BI semantic model (.pbix)
 | 3 | Run `python Source_to_snowflake_Scripts/2.from_S3_to_Snowflake.py` to create the raw table and `COPY INTO` Snowflake. |
 | 4 | Trigger the Airflow DAG from the UI or Astronomer CLI: `astro dev run dags trigger my_dag` |
 | 5 | Monitor the DAG in the Airflow UI. On success, all tasks show green. |
-| 6 *(streaming)* | Start Kafka: `docker compose up -d`. Run `producer.py`, then `tracker.py` / `consumer.py`. New orders from the API flow automatically into Snowflake within seconds. |
+| 6 *(streaming)* | Start Kafka: `docker compose up -d`. Run `producer.py`, then `consumer.py`. New orders from the API flow automatically into Snowflake within seconds. |
 | 7 *(validate)* | Run dbt tests manually if needed: `dbt test --select path:models/staging --profiles-dir .` and `dbt test --select path:models/marts --profiles-dir .` |
 | 8 *(Fabric batch)* | In Microsoft Fabric, run the Bronze → Silver → Gold pipeline to populate the Fabric Warehouse star schema. |
 | 9 *(Fabric streaming)* | Schedule/run `SC_Notebook`, publish to Service Bus, confirm `Supply_Chain_ES` Eventstream is active, and publish the event-triggered pipeline. |
@@ -441,60 +458,10 @@ powerbi/                               # Power BI semantic model (.pbix)
 
 ---
 
-## Security & Credential Management
-
-Across the project, multiple scripts and notebooks were identified as containing hardcoded, plaintext credentials. The table below consolidates findings into a single action list for remediation **before this project is shared, committed to a public repository, or handed off**.
-
-| Location | Credential Exposed | Recommended Fix |
-|---|---|---|
-| `snowflake_loader.py` | Snowflake username and password hardcoded in plaintext. | Load via `os.environ.get(...)` and a `.env` file. Rotate the exposed password. |
-| `s3_utils.py` | AWS access key / secret key hardcoded (same pattern). | Load via environment variables. Rotate any exposed key. |
-| `SC_Notebook` (Fabric) | Azure Service Bus connection string with embedded `SharedAccessKey` in a notebook cell. | Store in Fabric workspace secrets, Azure Key Vault, or retrieve via `mssparkutils.credentials`. Rotate the key in the Azure portal. |
-| `dbt/profiles.yml` | Snowflake credentials stored in the dbt profile file. | Replace with environment variables or a secrets manager. Exclude from version control. |
-
-**General recommendation:** standardize all credential access on a single pattern — environment variables for local/Python scripts, platform-native secret stores for Fabric notebooks and pipelines. Treat any credential already shared in a document, chat log, or repository as compromised and rotate it, independent of whether the fix above has been applied.
-
 > ⚠️ Before pushing this repository to GitHub, ensure `.env`, `profiles.yml`, and any notebook cells containing connection strings are excluded via `.gitignore` and that all exposed credentials listed above have been rotated.
 
 ---
 
-## Glossary
 
-| Term | Definition |
-|---|---|
-| **ETL** | Extract, Transform, Load — moving and reshaping data from source to destination. |
-| **ELT** | Extract, Load, Transform — loading raw data first, then transforming in-place with dbt. |
-| **DAG** | Directed Acyclic Graph — the unit of work scheduling in Apache Airflow. |
-| **dbt** | Data Build Tool — a SQL-first transformation framework that runs models inside the data warehouse. |
-| **OTIF** | On Time In Full — KPI measuring whether orders arrive on time and with complete quantities. |
-| **OTD** | On Time Delivery — percentage of orders delivered on or before the scheduled date. |
-| **Star Schema** | A dimensional modeling pattern with central fact tables surrounded by dimension tables. |
-| **Surrogate Key** | A system-generated identifier (e.g. MD5 hash) used instead of a natural business key. |
-| **Medallion Architecture** | Bronze → Silver → Gold layered data architecture used in the Fabric batch pipeline. |
-| **KRaft** | Kafka Raft mode — eliminates the need for a separate Zookeeper service. |
-| **Eventstream** | Microsoft Fabric managed streaming service connecting Service Bus to Lakehouse. |
-| **CDC** | Change Data Capture — identifying and propagating only new/changed records between systems. |
-| **n8n** | Workflow automation platform used to orchestrate the LLM AI Agent pipeline. |
 
-## Dependencies
-
-| Package | Layer | Purpose |
-|---|---|---|
-| `apache-airflow-providers-snowflake` | Batch ETL | Airflow operator and hook for Snowflake |
-| `dbt-core` | dbt | Core dbt transformation engine |
-| `dbt-snowflake` | dbt | dbt adapter for Snowflake |
-| `dbt-labs/dbt_utils` | dbt | Surrogate key macros and utilities |
-| `boto3` | Ingestion | AWS SDK for S3 file upload |
-| `snowflake-connector-python` | Ingestion | Python connector for Snowflake `COPY INTO` |
-| `confluent_kafka` | Streaming | Kafka producer/consumer client |
-| `azure.servicebus` | Streaming (Fabric) | Azure Service Bus SDK for Fabric notebook |
-| `fastapi` | Backend API | High-performance Python REST framework |
-| `supabase-py` | Backend API | Supabase Python client |
-| `flutter` / `dart` SDK | Flutter App | Cross-platform UI framework |
-| `fl_chart` | Flutter App | Bar, line, pie chart rendering |
-| `dio` | Flutter App | HTTP client for API calls |
-| `shared_preferences` | Flutter App | Local session storage |
-
----
-
-<p align="center"><em>Supply Chain Data Engineering &amp; Intelligence Platform — v1.0 — June 2026 — Ahmed Mohamed Fawzi — NTI Training Project</em></p>
+<p align="center"><em>Supply Chain Data Engineering &amp; Intelligence Solution — NTI Training Project</em></p>
