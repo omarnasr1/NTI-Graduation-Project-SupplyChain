@@ -136,7 +136,7 @@ All surrogate keys (except `dim_date`) are generated using `dbt_utils.generate_s
 
 ---
 
-## Pipeline 1 — Batch ETL (AWS / Snowflake)
+## Pipeline 1 — Batch ETL (Local Path)
 
 Ingests the historical supply chain dataset from a local CSV file into Snowflake, using AWS S3 as a staging/landing area, then transforms the raw data through dbt into the conformed star schema. Orchestrated by Apache Airflow (Astronomer).
 
@@ -144,13 +144,13 @@ Ingests the historical supply chain dataset from a local CSV file into Snowflake
 
 - Loads AWS credentials/config from environment variables via `.env`.
 - Creates an S3 client using `boto3`.
-- Creates the target bucket (handling the `us-east-1` vs other-region API difference), skipping/logging if it already exists.
+- Creates the target bucket.
 - Uploads the local CSV (`DataCoSupplyChainDatasetResult.csv`) to the configured bucket/key.
 
 ### Stage 2 — AWS S3 to Snowflake Raw Table (`from_S3_to_Snowflake.py`)
 
 **Manual prerequisite** (run once in the Snowflake query editor):
-- Create the virtual warehouse (XSMALL, auto-suspend/auto-resume enabled).
+- Create the virtual warehouse `SupplyChain_wh`, stage, and CSV file format.
 - Create the `SupplyChain_db` database and `raw` schema.
 
 **Automated script steps:**
@@ -158,12 +158,12 @@ Ingests the historical supply chain dataset from a local CSV file into Snowflake
 - Creates (or replaces) the `raw_supplyChain` table with a wide schema covering order, customer, product, category, department, shipping, and warehouse/inventory movement fields.
 - Creates a CSV file format object (`my_csv_format`) with header skipping, null handling, and double-quote enclosure.
 - Creates an external stage (`my_s3_stage`) pointing at the S3 bucket/prefix, bound to the CSV file format.
-- Runs `COPY INTO` with `ON_ERROR = 'CONTINUE'` — malformed rows are skipped rather than failing the load.
+- Runs `COPY INTO` command.
 - Prints the load result and final row count for verification.
 
-### Stage 3 — dbt Transformation (Staging → Star Schema)
+### Stage 3 — dbt Transformation (Staging → DWH → Star Schema)
 
-The dbt project is the transformation backbone of the entire platform — it runs once, and its output (the conformed star schema) is shared by **every** ingestion path in this project (AWS batch, AWS streaming, Fabric batch, Fabric streaming).
+The dbt project is the transformation backbone of the entire solution — it runs once, and its output (the conformed star schema) is shared by **every** ingestion path in this project (AWS batch, AWS streaming, Fabric batch, Fabric streaming).
 
 #### Staging Layer — `stg_supply_chain`
 
@@ -174,7 +174,7 @@ Reads from `raw_data.raw_supplyChain` and applies:
 - Country/state standardization and mojibake repair.
 - `product_description` (100% null) replaced with placeholder text.
 
-<!-- TODO: Add dbt staging run screenshot here -->
+<img src="Screen%20shots/Local/DBT%20Initial%20Load.png" alt="DBT Initial Load" width="900">
 
 #### Marts Layer — Dimensions & Facts
 
