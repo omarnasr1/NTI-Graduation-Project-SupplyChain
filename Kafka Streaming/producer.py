@@ -12,9 +12,9 @@ producer = Producer({
 
 def delivery_report(err, msg):
     if err:
-        print(f"❌ Delivery failed: {err}")
+        print(f"Delivery failed: {err}")
     else:
-        print(f"✅ Delivered Order {msg.offset()}")
+        print(f"Delivered Order {msg.offset()}")
 
 
 def fetch_order():
@@ -34,7 +34,7 @@ def fetch_order():
         return orders[-1]
 
     except requests.exceptions.RequestException as e:
-        print(f"❌ API request failed: {e}")
+        print(f"API request failed: {e}")
         return None
 
 
@@ -46,13 +46,13 @@ last_order = fetch_order()
 if last_order:
     last_sent_Order_Item_Id = last_order.get("Order_Item_Id")
     print(
-        f"🟢 Producer started. "
+        f"Producer started. "
         f"Current latest order is {last_sent_Order_Item_Id}. "
         f"Waiting for new orders..."
     )
 else:
     last_sent_Order_Item_Id = None
-    print("🟢 Producer started. No existing orders found.")
+    print("Producer started. No existing orders found.")
 
 
 # -------------------------
@@ -80,16 +80,16 @@ try:
 
                 last_sent_Order_Item_Id = current_order_item_id
 
-                print(f"📦 New order detected: {current_order_item_id}")
+                print(f"New order detected: {current_order_item_id}")
 
         time.sleep(POLL_INTERVAL_SECONDS)
 
 except KeyboardInterrupt:
 
-    print("\n🛑 Producer stopped by user.")
+    print("\nProducer stopped by user.")
 
 finally:
 
     producer.flush()
 
-    print("✅ Kafka producer closed successfully.")
+    print("Kafka producer closed successfully.")
