@@ -1,9 +1,6 @@
-# Supply Chain Data Engineering & Intelligence Platform
+# Supply Chain Data Engineering & Intelligence Solution
 
-End-to-end supply chain analytics platform spanning batch ETL, real-time streaming, dual-cloud data warehousing (Snowflake & Microsoft Fabric), a conformed star-schema data model, an interactive Power BI layer, and an AI-powered conversational analyst delivered through a cross-platform Flutter application.
-
-**Author:** Ahmed Mohamed Fawzi — NTI Training Project
-**Version:** v1.0 — June 2026
+End-to-end supply chain analytics Solution spanning batch ETL, real-time streaming, dual-cloud data warehousing (Snowflake & Microsoft Fabric), a conformed star-schema data model, an interactive Power BI layer, Agentic AI, and an AI-powered conversational analyst delivered through a cross-platform Flutter application.
 
 <!-- TODO: Add architecture banner / hero image here -->
 
