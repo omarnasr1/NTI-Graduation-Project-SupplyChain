@@ -1,16 +1,16 @@
 # snowflake_loader.py
 import snowflake.connector
 
-
+'''
 conn = snowflake.connector.connect(
-    user="3mar7nasr",
-    password="JCqdm571omaromar",
-    account="rm96122.af-south-1.aws",
+    user="?",
+    password="?",
+    account="?",
     warehouse="supplyChain_wh",
     database="SupplyChain_db",
     schema="raw"
 )
-
+'''
 
 def load_file(filename):
 
