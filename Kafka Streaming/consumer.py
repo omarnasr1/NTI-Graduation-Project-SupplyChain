@@ -90,7 +90,7 @@ consumer = Consumer(consumer_config)
 
 consumer.subscribe(["orders"])
 
-print("🟢 Consumer started")
+print("Consumer started")
 
 
 try:
@@ -123,7 +123,7 @@ try:
             index=False
         )
 
-        print(f"✅ CSV created: {filename}")
+        print(f"CSV created: {filename}")
         # some notes
         upload_to_s3(
             filename,
