@@ -84,7 +84,7 @@ The Solution is organized into parallel ingestion pipelines (batch and streaming
 
 A classic star-schema design is shared across all ingestion platforms (Snowflake and Fabric Warehouse). Three fact tables form the measurable core; fourteen dimension tables provide contextual attributes.
 
-<img src="Screen%20shots/Local/Solution%20Architecture.png" alt="System Architecture" width="900">
+<img src="Screen%20shots/Local/Data%20model.png" alt="Data Model" width="900">
 
 ### Fact Tables
 
