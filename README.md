@@ -243,7 +243,7 @@ Parallel to the batch path, captures new orders as they arrive using Apache Kafk
 
 A Fabric Data Factory pipeline re-implements the batch path natively on Microsoft Fabric, replacing S3 + Snowflake with Lakehouse + Warehouse, following a standard **medallion architecture** (Bronze → Silver → Gold), while reusing the exact same dbt project for the gold layer.
 
-<!-- TODO: Add Fabric batch pipeline screenshot here -->
+<img src="Screen%20shots/Local/Batch%20Fabric.png" alt="Batch Fabric" width="900">
 
 | Step | Activity | Description |
 |---|---|---|
@@ -259,7 +259,9 @@ Running the Gold Layer dbt job against the Fabric Warehouse populates the same c
 
 A Fabric-native equivalent of the Kafka streaming path, using Azure Service Bus and Fabric Eventstream in place of Kafka, and an event-driven Fabric pipeline in place of the Python consumer.
 
-<!-- TODO: Add Fabric streaming pipeline screenshot here -->
+
+<img src="Screen%20shots/Local/Streaming%20Fabric.png" alt="Streaming Fabric" width="900">
+<img src="Screen%20shots/Local/EventStream.png" alt="EventStream" width="900">
 
 | Component | Role |
 |---|---|
