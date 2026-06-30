@@ -2,7 +2,7 @@
 
 End-to-end supply chain analytics Solution spanning batch ETL, real-time streaming, dual-cloud data warehousing (Snowflake & Microsoft Fabric), a conformed star-schema data model, an interactive Power BI layer, Agentic AI, and an AI-powered conversational analyst delivered through a cross-platform Flutter application.
 
-<img src="Screen%20shots/Local/Solution%20Architecture.png" alt="System Architecture" width="800">
+<img src="Screen%20shots/Local/Solution%20Architecture.png" alt="System Architecture" width="900">
 
 ---
 
@@ -33,15 +33,7 @@ End-to-end supply chain analytics Solution spanning batch ETL, real-time streami
 
 Modern supply chains generate enormous volumes of transactional data across order management, inventory, shipping, and customer operations. Without a unified analytical solution, decision-makers are left working with fragmented spreadsheets, delayed reports, and manual processes — leading to poor visibility, missed delivery commitments, and unrealized profitability.
 
-This project builds a fully automated, dual-cloud data platform that ingests, transforms, models, visualizes, and exposes supply-chain data through both traditional BI and a natural-language AI interface — implemented twice, in parallel, on two different stacks (AWS + Snowflake, and Microsoft Fabric), and finally unified through a cross-platform Change Data Capture sync between them.
-
-## Problem Statement
-
-- **No single source of truth** — order, inventory, and shipping data lived in disconnected systems.
-- **Reactive operations** — KPIs such as late-delivery risk and OTIF were calculated manually, days after the fact.
-- **No self-service analytics** — business users required IT intervention for every ad-hoc report.
-- **No conversational interface** — analysts could not interrogate the data warehouse in natural language.
-- **No real-time ingestion path** — new orders were batch-uploaded manually with no streaming option.
+This project builds a fully automated, dual-cloud data platform that ingests, transforms, models, visualizes, and exposes supply-chain data through both traditional BI and an Agentic AI interface — implemented twice, in parallel, on two different stacks (AWS + Snowflake + DBT + Airflow, and Microsoft Fabric), and finally unified through a cross-platform Change Data Capture sync between them.
 
 ## Solution Pillars
 
