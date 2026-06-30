@@ -7,7 +7,6 @@ End-to-end supply chain analytics Solution spanning batch ETL, real-time streami
 ## Table of Contents
 
 - [Overview](#overview)
-- [Problem Statement](#problem-statement)
 - [Solution Pillars](#solution-pillars)
 - [High-Level Architecture](#high-level-architecture)
 - [Technology Stack](#technology-stack)
@@ -63,13 +62,13 @@ The Solution is organized into parallel ingestion pipelines (batch and streaming
 
 | Layer | Technology | Purpose |
 |---|---|---|
-| Batch Ingestion | Python (boto3), AWS S3 | CSV to cloud storage, Snowflake `COPY INTO` |
-| Message Broker | Apache Kafka (KRaft mode) | Real-time order streaming (AWS path) |
+| Batch Ingestion | boto3, AWS S3 | CSV to cloud storage, Snowflake `COPY INTO` |
+| Message Broker | Apache Kafka (KRaft mode) | Real-time order streaming (Local path) |
 | Event Streaming (Fabric) | Azure Service Bus + Fabric Eventstream | Real-time streaming on Microsoft Fabric |
-| Data Warehouse (AWS) | Snowflake | Cloud analytical store |
+| Data Warehouse (Local path) | Snowflake | Cloud analytical store |
 | Data Platform (Fabric) | Microsoft Fabric (Lakehouse + Warehouse) | Fabric-native re-platforming |
-| Transformation | dbt Core + dbt_utils | SQL-based ELT models, shared across platforms |
-| Orchestration (AWS) | Apache Airflow (Astronomer) | DAG scheduling & monitoring |
+| Transformation | dbt Core | SQL-based ELT models, shared across platforms |
+| Orchestration (Local path) | Apache Airflow (Astronomer) | DAG scheduling & monitoring |
 | Orchestration (Fabric) | Fabric Data Factory Pipelines | Fabric-native pipeline orchestration & CDC sync |
 | BI & Reporting | Microsoft Power BI | Semantic model + interactive dashboards |
 | Backend API | FastAPI (Python) | REST endpoints, Kafka publisher |
