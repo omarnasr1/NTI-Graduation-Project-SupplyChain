@@ -44,7 +44,7 @@ This project builds a fully automated, dual-cloud data platform that ingests, tr
 
 ## High-Level Architecture
 
-The platform is organized into parallel ingestion pipelines (batch and streaming, on two cloud platforms) that share a single dbt transformation project and converge on a unified Power BI semantic model. A final cross-platform CDC sync keeps the Fabric Warehouse and Snowflake aligned.
+The Solution is organized into parallel ingestion pipelines (batch and streaming, on two cloud platforms) that share a single dbt transformation project and converge on a unified Power BI semantic model. A final cross-platform CDC sync keeps the Fabric Warehouse and Snowflake aligned.
 
 <img src="Screen%20shots/Local/Solution%20Architecture.png" alt="System Architecture" width="900">
 
@@ -84,7 +84,7 @@ The platform is organized into parallel ingestion pipelines (batch and streaming
 
 A classic star-schema design is shared across all ingestion platforms (Snowflake and Fabric Warehouse). Three fact tables form the measurable core; fourteen dimension tables provide contextual attributes.
 
-<!-- TODO: Add ERD diagram here -->
+<img src="Screen%20shots/Local/Solution%20Architecture.png" alt="System Architecture" width="900">
 
 ### Fact Tables
 
