@@ -354,6 +354,8 @@ A validated multi-field form for submitting supply-chain order transactions. On 
 
 Users ask supply-chain questions in plain English. The app maintains multiple independent chat sessions, each with isolated LLM memory via a unique `session_id` passed to n8n.
 
+<img src="AI%20Agent/chatbot.png" alt="chatbot" width="900">
+
 ### n8n AI Agent Workflow
 
 The n8n workflow receives the user's question via webhook, routes it through an AI Agent node (Gemini LLM), executes the generated SQL on Snowflake, and returns a structured JSON response with `bot_message`, `chart_type`, and `chart_data`.
