@@ -287,7 +287,13 @@ The pipeline runs a `Copy data` activity for each conformed dimension and fact t
 
 The Power BI dashboard connects directly to the Snowflake analytical layer (or Fabric Warehouse) and provides interactive visibility into four supply-chain domains. The model uses a mixed storage mode (Import + DirectQuery). At the time of writing, the semantic model and its relationships are built; report visuals are a planned next step.
 
-<!-- TODO: Add dashboard screenshots here -->
+<img src="Power%20BI/power%20BI%20page1.png" alt="power BI page1.png" width="900">
+---
+<img src="Power%20BI/power%20BI%20page2.png" alt="power BI page2.png" width="900">
+---
+<img src="Power%20BI/power%20BI%20page3.png" alt="power BI page3.png" width="900">
+---
+<img src="Power%20BI/power%20BI%20page4.png" alt="power BI page4.png" width="900">
 
 ### Semantic Model Relationships
 
@@ -298,7 +304,7 @@ The Power BI dashboard connects directly to the Snowflake analytical layer (or F
 - `dim_product` links out to `dim_category` and `dim_department`.
 - `dim_customer` links out to `dim_customer_geography`.
 
-<!-- TODO: Add semantic model relationship diagram here -->
+<img src="Power%20BI/Semantic%20model.png" alt="Semantic model" width="900">
 
 ### Report Pages
 
