@@ -197,8 +197,8 @@ DAG: `dags/my_dag.py` — `start_date=2026-06-01`, `schedule=None`, `catchup=Fal
 | `check_row_count` | `PythonOperator`. Connects via `SnowflakeHook` (connection ID: `snowflake_conn`) and runs `COUNT(*)` on `RAW_SUPPLYCHAIN`. Fails if the table is empty, preventing downstream transforms from running on stale data. |
 | `dbt_staging_run` | `BashOperator`: `dbt run --select path:models/staging --profiles-dir .` |
 | `dbt_staging_test` | `BashOperator`: `dbt test --select path:models/staging --profiles-dir .` — validates `not_null` and `accepted_values` constraints. |
-| `dbt_marts_run` | `BashOperator`: `dbt run --select path:models/marts --profiles-dir .` — builds all 14 dimensions and 3 facts. |
-| `dbt_marts_test` | `BashOperator`: `dbt test --select path:models/marts --profiles-dir .` — validates `unique`, `not_null`, and referential integrity constraints. |
+| `dbt_marts_run` | `BashOperator`: `dbt run --select path:models/DWH --profiles-dir .` — builds all 14 dimensions and 3 facts. |
+| `dbt_marts_test` | `BashOperator`: `dbt test --select path:models/DWH --profiles-dir .` — validates `unique`, `not_null`, and referential integrity constraints. |
 
 <img src="Screen%20shots/Local/Airflow%20Dag.png" alt="Airflow Dag" width="900">
 
@@ -224,7 +224,7 @@ Parallel to the batch path, captures new orders as they arrive using Apache Kafk
 
 <img src="Screen%20shots/Local/Producer.png" alt="Producer" width="900">
 
-### Consumer (`consumer.py` / `tracker.py`)
+### Consumer (`consumer.py`)
 
 - Subscribes to the `orders` topic with consumer group `order-tracker`, `auto.offset.reset='latest'`.
 - For each message: parses the JSON payload and maps it into the full raw table's column list (absent fields filled with `None`).
