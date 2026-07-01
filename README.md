@@ -241,7 +241,7 @@ Parallel to the batch path, captures new orders as they arrive using Apache Kafk
 ---
 ## Microsoft Fabric workspace 
 
-<img src="Microsoft%20Fabric/SupplyChain%20Wroksapce.png" alt="SupplyChain Workspace" width="900">
+<img src="Microsoft%20Fabric/SupplyChain%20Workspace.png" alt="SupplyChain Workspace" width="900">
 
 ---
 ## Pipeline 3 — Batch ETL (Microsoft Fabric)
