@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "KQLDatabase",
+    "displayName": "SupplyChain_EH",
+    "description": "SupplyChain_EH"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "ad74f2de-1afb-9a0a-4357-84063d2f5e30"
+  }
+}

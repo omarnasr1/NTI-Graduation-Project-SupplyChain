@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "MirroredDatabase",
+    "displayName": "CDC_Snowflake_SUPPLYCHAIN_DB"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "f039028d-369d-aa7d-4621-147c518c9a70"
+  }
+}

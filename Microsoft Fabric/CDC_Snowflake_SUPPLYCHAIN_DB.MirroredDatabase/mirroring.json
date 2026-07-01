@@ -1,0 +1,158 @@
+{
+  "properties": {
+    "source": {
+      "type": "Snowflake",
+      "typeProperties": {
+        "connection": "6e050669-4838-4892-8f1d-4fcc8445566b",
+        "database": "SUPPLYCHAIN_DB"
+      }
+    },
+    "target": {
+      "type": "MountedRelationalDatabase",
+      "typeProperties": {
+        "defaultSchema": "dbo",
+        "format": "Delta",
+        "retentionInDays": 1,
+        "enableDeltaChangeDataFeed": false
+      }
+    },
+    "mountedTables": [
+      {
+        "source": {
+          "typeProperties": {
+            "schemaName": "MARTS",
+            "tableName": "DIM_CATEGORY"
+          }
+        }
+      },
+      {
+        "source": {
+          "typeProperties": {
+            "schemaName": "MARTS",
+            "tableName": "DIM_CUSTOMER"
+          }
+        }
+      },
+      {
+        "source": {
+          "typeProperties": {
+            "schemaName": "MARTS",
+            "tableName": "DIM_CUSTOMER_GEOGRAPHY"
+          }
+        }
+      },
+      {
+        "source": {
+          "typeProperties": {
+            "schemaName": "MARTS",
+            "tableName": "DIM_DATE"
+          }
+        }
+      },
+      {
+        "source": {
+          "typeProperties": {
+            "schemaName": "MARTS",
+            "tableName": "DIM_DELIVERY_STATUS"
+          }
+        }
+      },
+      {
+        "source": {
+          "typeProperties": {
+            "schemaName": "MARTS",
+            "tableName": "DIM_DEPARTMENT"
+          }
+        }
+      },
+      {
+        "source": {
+          "typeProperties": {
+            "schemaName": "MARTS",
+            "tableName": "DIM_MOVEMENT_TYPE"
+          }
+        }
+      },
+      {
+        "source": {
+          "typeProperties": {
+            "schemaName": "MARTS",
+            "tableName": "DIM_ORDER"
+          }
+        }
+      },
+      {
+        "source": {
+          "typeProperties": {
+            "schemaName": "MARTS",
+            "tableName": "DIM_ORDER_GEOGRAPHY"
+          }
+        }
+      },
+      {
+        "source": {
+          "typeProperties": {
+            "schemaName": "MARTS",
+            "tableName": "DIM_ORDER_STATUS"
+          }
+        }
+      },
+      {
+        "source": {
+          "typeProperties": {
+            "schemaName": "MARTS",
+            "tableName": "DIM_PAYMENT"
+          }
+        }
+      },
+      {
+        "source": {
+          "typeProperties": {
+            "schemaName": "MARTS",
+            "tableName": "DIM_PRODUCT"
+          }
+        }
+      },
+      {
+        "source": {
+          "typeProperties": {
+            "schemaName": "MARTS",
+            "tableName": "DIM_SHIPPING_MODE"
+          }
+        }
+      },
+      {
+        "source": {
+          "typeProperties": {
+            "schemaName": "MARTS",
+            "tableName": "DIM_WAREHOUSE"
+          }
+        }
+      },
+      {
+        "source": {
+          "typeProperties": {
+            "schemaName": "MARTS",
+            "tableName": "FACT_INVENTORY_MOVEMENT"
+          }
+        }
+      },
+      {
+        "source": {
+          "typeProperties": {
+            "schemaName": "MARTS",
+            "tableName": "FACT_ORDER_ITEM"
+          }
+        }
+      },
+      {
+        "source": {
+          "typeProperties": {
+            "schemaName": "MARTS",
+            "tableName": "FACT_SHIPPING_PERFORMANCE"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,593 @@
+version: 2
+
+models:
+
+  ##########################################################################
+  # DIMENSIONS
+  ##########################################################################
+
+  - name: dim_customer_geography
+    description: >
+      Geography dimension for customers, deduplicated on street, state,
+      zipcode, country, and city.
+    columns:
+
+      - name: customer_geography_key
+        description: Surrogate key, hashed from street/state/zipcode/country/city.
+        tests:
+          - unique
+          - not_null
+
+      - name: customer_street
+        description: Trimmed customer street address.
+        tests:
+          - not_null
+
+      - name: customer_state
+        description: >
+          Customer state abbreviation. Can be null where source contained
+          numeric values instead of a valid state code.
+
+      - name: customer_zipcode
+        description: Customer zip code. Can be null (small number of source rows).
+
+      - name: customer_country
+        description: Customer country name.
+        tests:
+          - not_null
+
+      - name: customer_city
+        description: Trimmed customer city name.
+        tests:
+          - not_null
+
+  - name: dim_customer
+    description: >
+      Customer dimension. Surrogate key built from first name, last name,
+      street, and zipcode, since no stable customer ID exists in the source.
+    columns:
+
+      - name: customer_key
+        description: Surrogate key, hashed from fname/lname/street/zipcode.
+        tests:
+          - unique
+          - not_null
+
+      - name: customer_geography_key
+        description: FK to dim_customer_geography.
+        tests:
+          - relationships:
+              to: ref('dim_customer_geography')
+              field: customer_geography_key
+
+      - name: customer_fname
+        description: Trimmed customer first name.
+        tests:
+          - not_null
+
+      - name: customer_lname
+        description: Trimmed customer last name. Can be null (small number of source rows).
+
+      - name: customer_email
+        description: Masked/placeholder email value, not usable for real PII analysis.
+        tests:
+          - not_null
+
+      - name: customer_password
+        description: Masked/placeholder password value, not usable for auth analysis.
+        tests:
+          - not_null
+
+      - name: customer_segment
+        description: Customer segment classification (e.g. Consumer, Corporate, Home Office).
+        tests:
+          - not_null
+
+  - name: dim_category
+    description: Product category dimension, deduplicated on category name.
+    columns:
+
+      - name: category_key
+        description: Surrogate key, hashed from category_name.
+        tests:
+          - unique
+          - not_null
+
+      - name: category_name
+        description: Trimmed product category name.
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_department
+    description: Department dimension, deduplicated on department name.
+    columns:
+
+      - name: department_key
+        description: Surrogate key, hashed from department_name.
+        tests:
+          - unique
+          - not_null
+
+      - name: department_name
+        description: Trimmed department name.
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_product
+    description: >
+      Product dimension. Surrogate key built from name, description, image,
+      and status, since no stable product ID exists in the source. Note:
+      two distinct physical products sharing identical values across all
+      four attributes will collapse into a single dimension row.
+    columns:
+
+      - name: product_key
+        description: Surrogate key, hashed from name/description/image/status.
+        tests:
+          - unique
+          - not_null
+
+      - name: product_name
+        description: Trimmed product name.
+        tests:
+          - not_null
+
+      - name: product_description
+        description: >
+          Product description. Source is 100% null in staging; replaced
+          with placeholder 'No description available'.
+        tests:
+          - not_null
+
+      - name: product_image
+        description: Product image URL. Source URLs are known to be broken/unusable.
+
+      - name: product_status
+        description: Raw product status code. Constant value of 0 in source (degenerate).
+
+      - name: category_key
+        description: FK to dim_category.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_category')
+              field: category_key
+
+      - name: department_key
+        description: FK to dim_department.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_department')
+              field: department_key
+
+  - name: dim_order_geography
+    description: >
+      Geography dimension for orders, deduplicated on city, state, country,
+      region, and zipcode.
+    columns:
+
+      - name: order_geography_key
+        description: Surrogate key, hashed from city/state/country/region/zipcode.
+        tests:
+          - unique
+          - not_null
+
+      - name: order_city
+        description: >
+          Order city name with mojibake character repair applied
+          ('ï؟½' -> 'ã', bare '?' -> '@'). Best-effort repair, may not
+          cover every corruption pattern.
+        tests:
+          - not_null
+
+      - name: order_state
+        description: Order state name with the same mojibake repair applied.
+        tests:
+          - not_null
+
+      - name: order_country
+        description: Order country name with the same mojibake repair applied.
+        tests:
+          - not_null
+
+      - name: order_region
+        description: Trimmed order region name.
+        tests:
+          - not_null
+
+      - name: order_zipcode
+        description: >
+          Order zip code. Source contains a large number of null values
+          (~155,679 rows in staging).
+
+      - name: market
+        description: Trimmed market region name.
+        tests:
+          - not_null
+
+      - name: latitude
+        description: Order/customer latitude coordinate.
+        tests:
+          - not_null
+
+      - name: longitude
+        description: Order/customer longitude coordinate.
+        tests:
+          - not_null
+
+  - name: dim_shipping_mode
+    description: Shipping mode dimension, deduplicated on shipping_mode.
+    columns:
+
+      - name: shipping_mode_key
+        description: Surrogate key, hashed from shipping_mode.
+        tests:
+          - unique
+          - not_null
+
+      - name: shipping_mode
+        description: Trimmed shipping mode (e.g. Standard Class, First Class).
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_delivery_status
+    description: Delivery status dimension, deduplicated on delivery_status.
+    columns:
+
+      - name: delivery_status_key
+        description: Surrogate key, hashed from delivery_status.
+        tests:
+          - unique
+          - not_null
+
+      - name: delivery_status
+        description: Status of the delivery (e.g. on time, late, advance).
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_order_status
+    description: Order status dimension, deduplicated on order_status.
+    columns:
+
+      - name: order_status_key
+        description: Surrogate key, hashed from order_status.
+        tests:
+          - unique
+          - not_null
+
+      - name: order_status
+        description: Trimmed order status.
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_payment
+    description: Payment/order type dimension, deduplicated on type.
+    columns:
+
+      - name: payment_key
+        description: Surrogate key, hashed from type.
+        tests:
+          - unique
+          - not_null
+
+      - name: type
+        description: Payment/order type from source system (e.g. DEBIT, TRANSFER, CASH).
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_movement_type
+    description: >
+      Inventory movement type dimension, deduplicated on movement type name
+      and direction.
+    columns:
+
+      - name: movement_type_key
+        description: Surrogate key, hashed from movement_type_name and movement_direction.
+        tests:
+          - unique
+          - not_null
+
+      - name: movement_type_name
+        description: Trimmed name of the movement type.
+        tests:
+          - not_null
+
+      - name: movement_direction
+        description: Trimmed direction of the inventory movement (e.g. in/out).
+        tests:
+          - not_null
+
+  - name: dim_warehouse
+    description: >
+      Warehouse dimension, deduplicated on warehouse name, city, and country.
+    columns:
+
+      - name: warehouse_key
+        description: Surrogate key, hashed from warehouse_name/city/country.
+        tests:
+          - unique
+          - not_null
+
+      - name: warehouse_name
+        description: Trimmed warehouse name.
+        tests:
+          - not_null
+
+      - name: warehouse_type
+        description: Trimmed warehouse type.
+
+      - name: warehouse_city
+        description: Trimmed warehouse city.
+        tests:
+          - not_null
+
+      - name: warehouse_country
+        description: Trimmed warehouse country.
+        tests:
+          - not_null
+
+      - name: warehouse_capacity
+        description: Capacity of the warehouse.
+
+  - name: dim_date
+    description: >
+      Calendar dimension covering order_date, shipping_date, and
+      movement_date. date_key is the integer YYYYMMDD representation
+      of full_date, not a hashed surrogate key.
+    columns:
+
+      - name: date_key
+        description: Integer YYYYMMDD representation of full_date.
+        tests:
+          - unique
+          - not_null
+
+      - name: full_date
+        description: Calendar date value.
+        tests:
+          - unique
+          - not_null
+
+      - name: day
+        description: Day of month.
+        tests:
+          - not_null
+
+      - name: month
+        description: Month number.
+        tests:
+          - not_null
+
+      - name: quarter
+        description: Calendar quarter number.
+        tests:
+          - not_null
+
+      - name: year
+        description: Calendar year.
+        tests:
+          - not_null
+
+      - name: day_name
+        description: Abbreviated day name (e.g. MON, TUE).
+        tests:
+          - not_null
+
+      - name: month_name
+        description: Abbreviated month name (e.g. JAN, FEB).
+        tests:
+          - not_null
+  
+  - name: dim_order
+    description: >
+      Order dimension. Grain: one row per order_id. Holds the order-level
+      attributes (customer, order geography, shipping mode, delivery
+      status, order status, order date, shipping date, payment type) that
+      are constant across every order_item belonging to the same order_id.
+    columns:
+
+      - name: order_key
+        description: Surrogate key, hashed from order_id.
+        tests:
+          - unique
+          - not_null
+
+      - name: order_id
+        description: Natural order identifier from source.
+        tests:
+          - unique
+          - not_null
+
+      - name: customer_key
+        description: FK to dim_customer.
+        tests:
+          - relationships:
+              to: ref('dim_customer')
+              field: customer_key
+
+      - name: order_geography_key
+        description: FK to dim_order_geography.
+        tests:
+          - relationships:
+              to: ref('dim_order_geography')
+              field: order_geography_key
+
+      - name: shipping_mode_key
+        description: FK to dim_shipping_mode.
+        tests:
+          - relationships:
+              to: ref('dim_shipping_mode')
+              field: shipping_mode_key
+
+      - name: delivery_status_key
+        description: FK to dim_delivery_status.
+        tests:
+          - relationships:
+              to: ref('dim_delivery_status')
+              field: delivery_status_key
+
+      - name: order_status_key
+        description: FK to dim_order_status.
+        tests:
+          - relationships:
+              to: ref('dim_order_status')
+              field: order_status_key
+
+      - name: order_date_key
+        description: FK to dim_date, representing the order date.
+        tests:
+          - relationships:
+              to: ref('dim_date')
+              field: date_key
+
+      - name: shipping_date_key
+        description: FK to dim_date, representing the shipping date.
+        tests:
+          - relationships:
+              to: ref('dim_date')
+              field: date_key
+
+      - name: payment_key
+        description: FK to dim_payment.
+        tests:
+          - relationships:
+              to: ref('dim_payment')
+              field: payment_key
+  ##########################################################################
+  # FACTS
+  ##########################################################################
+
+  - name: fact_order_item
+    description: >
+      Order line item fact. Grain: one row per order_item_id. Order-level
+      attributes (customer, geography, shipping, status, dates, payment)
+      live in dim_order and are reached via order_key.
+    columns:
+
+      - name: order_item_key
+        description: Surrogate key, hashed from order_item_id.
+        tests:
+          - unique
+          - not_null
+
+      - name: order_item_id
+        description: Natural order item identifier from source.
+        tests:
+          - not_null
+
+      - name: order_key
+        description: FK to dim_order.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_order')
+              field: order_key
+
+      - name: product_key
+        description: FK to dim_product.
+        tests:
+          - relationships:
+              to: ref('dim_product')
+              field: product_key
+
+      - name: product_price
+        description: Product price at time of order, decimal(18,2).
+        tests:
+          - not_null
+
+      - name: sales
+        description: Total sales value, decimal(18,2).
+        tests:
+          - not_null
+
+      - name: sales_per_customer
+        description: Sales value per customer, decimal(18,2).
+        tests:
+          - not_null
+
+      - name: order_item_quantity
+        description: Quantity of the product ordered.
+        tests:
+          - not_null
+
+      - name: order_item_product_price
+        description: Product price at time of order, decimal(18,2).
+        tests:
+          - not_null
+
+      - name: order_item_discount
+        description: Discount amount applied to the order item, decimal(18,2).
+        tests:
+          - not_null
+
+      - name: order_item_discount_rate
+        description: Discount rate applied to the order item, decimal(18,4).
+        tests:
+          - not_null
+
+      - name: order_item_total
+        description: Total value of the order item, decimal(18,2).
+        tests:
+          - not_null
+
+      - name: order_item_profit_ratio
+        description: Profit ratio for the order item, decimal(18,4).
+        tests:
+          - not_null
+
+      - name: order_profit_per_order
+        description: Profit per order, decimal(18,2). Can be negative.
+
+      - name: benefit_per_order
+        description: Profit/loss benefit per order, decimal(18,2). Can be negative.
+
+  - name: fact_shipping_performance
+    description: >
+      Shipping performance fact. Grain: one row per order_id (regraded
+      from order_item_id, since shipping/delivery attributes are constant
+      across all items in the same order).
+    columns:
+
+      - name: shipping_performance_key
+        description: Surrogate key, hashed from order_id.
+        tests:
+          - unique
+          - not_null
+
+      - name: order_key
+        description: FK to dim_order.
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              to: ref('dim_order')
+              field: order_key
+
+      - name: days_for_shipping_real
+        description: Actual number of days taken to ship the order.
+        tests:
+          - not_null
+
+      - name: days_for_shipment_scheduled
+        description: Scheduled/planned number of days for shipment.
+        tests:
+          - not_null
+
+      - name: delay_between_real_scheduled
+        description: >
+          Calculated delay, days_for_shipment_scheduled minus
+          days_for_shipping_real. Negative values indicate a late shipment.
+        tests:
+          - not_null
+
+      - name: late_delivery_risk
+        description: Binary flag (0/1) indicating risk of late delivery.
+        tests:
+          - not_null

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "CDC with snowflake"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "c07e9d20-2376-9941-4f8d-d9fc262ce783"
+  }
+}

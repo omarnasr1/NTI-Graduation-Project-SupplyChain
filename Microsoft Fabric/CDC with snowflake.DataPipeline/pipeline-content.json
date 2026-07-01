@@ -1,0 +1,2651 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "sqlReaderQuery": "SELECT \n    CAST(category_key AS VARCHAR(255)) AS category_key,\n    CAST(category_name AS VARCHAR(255)) AS category_name\nFROM bronze.dim_category\n",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "DataWarehouseTable",
+              "schema": [],
+              "connectionSettings": {
+                "name": "supplychain_wh",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "3919a738-9577-9278-4c8d-b5cb24d95046",
+                    "endpoint": "fbcek6n6junebmvlmss2obu6fm-xlmyqkdufk6ebpwfexvfppaq4i.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000"
+                  },
+                  "externalReferences": {
+                    "connection": "b7c6f099-cd44-4ecc-9cd8-e3fc59505bb1"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "SnowflakeSink",
+            "importSettings": {
+              "type": "SnowflakeImportCopyCommand"
+            },
+            "writeBehavior": "upsert",
+            "upsertSettings": {
+              "keys": [
+                "CATEGORY_KEY"
+              ]
+            },
+            "datasetSettings": {
+              "type": "SnowflakeTable",
+              "typeProperties": {
+                "schema": "MARTS",
+                "table": "DIM_CATEGORY",
+                "database": "SUPPLYCHAIN_DB"
+              },
+              "version": "1.1",
+              "schema": [],
+              "externalReferences": {
+                "connection": "6e050669-4838-4892-8f1d-4fcc8445566b"
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "category_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "255"
+                },
+                "sink": {
+                  "name": "CATEGORY_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "category_name",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "255"
+                },
+                "sink": {
+                  "name": "CATEGORY_NAME",
+                  "physicalType": "VARCHAR"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": true
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "CDC_Dim_category",
+        "dependsOn": []
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "DataWarehouseTable",
+              "typeProperties": {
+                "schema": "bronze",
+                "table": "dim_customer"
+              },
+              "schema": [],
+              "connectionSettings": {
+                "name": "supplychain_wh",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "3919a738-9577-9278-4c8d-b5cb24d95046",
+                    "endpoint": "fbcek6n6junebmvlmss2obu6fm-xlmyqkdufk6ebpwfexvfppaq4i.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000"
+                  },
+                  "externalReferences": {
+                    "connection": "b7c6f099-cd44-4ecc-9cd8-e3fc59505bb1"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "SnowflakeSink",
+            "importSettings": {
+              "type": "SnowflakeImportCopyCommand"
+            },
+            "writeBehavior": "upsert",
+            "upsertSettings": {
+              "keys": [
+                "CUSTOMER_KEY"
+              ]
+            },
+            "datasetSettings": {
+              "type": "SnowflakeTable",
+              "typeProperties": {
+                "schema": "MARTS",
+                "table": "DIM_CUSTOMER",
+                "database": "SUPPLYCHAIN_DB"
+              },
+              "version": "1.1",
+              "schema": [],
+              "externalReferences": {
+                "connection": "6e050669-4838-4892-8f1d-4fcc8445566b"
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "customer_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "CUSTOMER_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "customer_geography_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "CUSTOMER_GEOGRAPHY_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "customer_fname",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "CUSTOMER_FNAME",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "customer_lname",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "CUSTOMER_LNAME",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "customer_street",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "CUSTOMER_STREET",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "customer_country",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "CUSTOMER_COUNTRY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "customer_email",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "CUSTOMER_EMAIL",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "customer_password",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "CUSTOMER_PASSWORD",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "customer_segment",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "CUSTOMER_SEGMENT",
+                  "physicalType": "VARCHAR"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": true
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "CDC_Dim_custoemer",
+        "dependsOn": [
+          {
+            "activity": "CDC_Dim_category",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "DataWarehouseTable",
+              "typeProperties": {
+                "schema": "bronze",
+                "table": "dim_customer_geography"
+              },
+              "schema": [],
+              "connectionSettings": {
+                "name": "supplychain_wh",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "3919a738-9577-9278-4c8d-b5cb24d95046",
+                    "endpoint": "fbcek6n6junebmvlmss2obu6fm-xlmyqkdufk6ebpwfexvfppaq4i.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000"
+                  },
+                  "externalReferences": {
+                    "connection": "b7c6f099-cd44-4ecc-9cd8-e3fc59505bb1"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "SnowflakeSink",
+            "importSettings": {
+              "type": "SnowflakeImportCopyCommand"
+            },
+            "writeBehavior": "upsert",
+            "upsertSettings": {
+              "keys": [
+                "CUSTOMER_GEOGRAPHY_KEY"
+              ]
+            },
+            "datasetSettings": {
+              "type": "SnowflakeTable",
+              "typeProperties": {
+                "schema": "MARTS",
+                "table": "DIM_CUSTOMER_GEOGRAPHY",
+                "database": "SUPPLYCHAIN_DB"
+              },
+              "version": "1.1",
+              "schema": [],
+              "externalReferences": {
+                "connection": "6e050669-4838-4892-8f1d-4fcc8445566b"
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "customer_geography_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "CUSTOMER_GEOGRAPHY_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "customer_street",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "CUSTOMER_STREET",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "customer_state",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "CUSTOMER_STATE",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "customer_zipcode",
+                  "type": "Int32",
+                  "physicalType": "int"
+                },
+                "sink": {
+                  "name": "CUSTOMER_ZIPCODE",
+                  "physicalType": "NUMBER",
+                  "scale": 0,
+                  "precision": 38
+                }
+              },
+              {
+                "source": {
+                  "name": "customer_country",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "CUSTOMER_COUNTRY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "customer_city",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "CUSTOMER_CITY",
+                  "physicalType": "VARCHAR"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": true
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "CDC_Dim_custoem_geography",
+        "dependsOn": [
+          {
+            "activity": "CDC_Dim_custoemer",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "DataWarehouseTable",
+              "typeProperties": {
+                "schema": "bronze",
+                "table": "dim_delivery_status"
+              },
+              "schema": [],
+              "connectionSettings": {
+                "name": "supplychain_wh",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "3919a738-9577-9278-4c8d-b5cb24d95046",
+                    "endpoint": "fbcek6n6junebmvlmss2obu6fm-xlmyqkdufk6ebpwfexvfppaq4i.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000"
+                  },
+                  "externalReferences": {
+                    "connection": "b7c6f099-cd44-4ecc-9cd8-e3fc59505bb1"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "SnowflakeSink",
+            "importSettings": {
+              "type": "SnowflakeImportCopyCommand"
+            },
+            "writeBehavior": "upsert",
+            "upsertSettings": {
+              "keys": [
+                "DELIVERY_STATUS_KEY"
+              ]
+            },
+            "datasetSettings": {
+              "type": "SnowflakeTable",
+              "typeProperties": {
+                "schema": "MARTS",
+                "table": "DIM_DELIVERY_STATUS",
+                "database": "SUPPLYCHAIN_DB"
+              },
+              "version": "1.1",
+              "schema": [],
+              "externalReferences": {
+                "connection": "6e050669-4838-4892-8f1d-4fcc8445566b"
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "delivery_status_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "DELIVERY_STATUS_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "delivery_status",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "DELIVERY_STATUS",
+                  "physicalType": "VARCHAR"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": true
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "CDC_Dim_Date",
+        "dependsOn": [
+          {
+            "activity": "CDC_Dim_custoem_geography",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "DataWarehouseTable",
+              "typeProperties": {
+                "schema": "bronze",
+                "table": "dim_delivery_status"
+              },
+              "schema": [],
+              "connectionSettings": {
+                "name": "supplychain_wh",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "3919a738-9577-9278-4c8d-b5cb24d95046",
+                    "endpoint": "fbcek6n6junebmvlmss2obu6fm-xlmyqkdufk6ebpwfexvfppaq4i.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000"
+                  },
+                  "externalReferences": {
+                    "connection": "b7c6f099-cd44-4ecc-9cd8-e3fc59505bb1"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "SnowflakeSink",
+            "importSettings": {
+              "type": "SnowflakeImportCopyCommand"
+            },
+            "writeBehavior": "upsert",
+            "upsertSettings": {
+              "keys": [
+                "DELIVERY_STATUS_KEY"
+              ]
+            },
+            "datasetSettings": {
+              "type": "SnowflakeTable",
+              "typeProperties": {
+                "schema": "MARTS",
+                "table": "DIM_DELIVERY_STATUS",
+                "database": "SUPPLYCHAIN_DB"
+              },
+              "version": "1.1",
+              "schema": [],
+              "externalReferences": {
+                "connection": "6e050669-4838-4892-8f1d-4fcc8445566b"
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "delivery_status_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "DELIVERY_STATUS_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "delivery_status",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "DELIVERY_STATUS",
+                  "physicalType": "VARCHAR"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": true
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "CDC_Dim_delivary_status",
+        "dependsOn": [
+          {
+            "activity": "CDC_Dim_Date",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "DataWarehouseTable",
+              "typeProperties": {
+                "schema": "bronze",
+                "table": "dim_department"
+              },
+              "schema": [],
+              "connectionSettings": {
+                "name": "supplychain_wh",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "3919a738-9577-9278-4c8d-b5cb24d95046",
+                    "endpoint": "fbcek6n6junebmvlmss2obu6fm-xlmyqkdufk6ebpwfexvfppaq4i.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000"
+                  },
+                  "externalReferences": {
+                    "connection": "b7c6f099-cd44-4ecc-9cd8-e3fc59505bb1"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "SnowflakeSink",
+            "importSettings": {
+              "type": "SnowflakeImportCopyCommand"
+            },
+            "writeBehavior": "upsert",
+            "upsertSettings": {
+              "keys": [
+                "DEPARTMENT_KEY"
+              ]
+            },
+            "datasetSettings": {
+              "type": "SnowflakeTable",
+              "typeProperties": {
+                "schema": "MARTS",
+                "table": "DIM_DEPARTMENT",
+                "database": "SUPPLYCHAIN_DB"
+              },
+              "version": "1.1",
+              "schema": [],
+              "externalReferences": {
+                "connection": "6e050669-4838-4892-8f1d-4fcc8445566b"
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "department_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "DEPARTMENT_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "department_name",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "DEPARTMENT_NAME",
+                  "physicalType": "VARCHAR"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": true
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "CDC_Dim_Department",
+        "dependsOn": [
+          {
+            "activity": "CDC_Dim_delivary_status",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "DataWarehouseTable",
+              "typeProperties": {
+                "schema": "bronze",
+                "table": "dim_movement_type"
+              },
+              "schema": [],
+              "connectionSettings": {
+                "name": "supplychain_wh",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "3919a738-9577-9278-4c8d-b5cb24d95046",
+                    "endpoint": "fbcek6n6junebmvlmss2obu6fm-xlmyqkdufk6ebpwfexvfppaq4i.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000"
+                  },
+                  "externalReferences": {
+                    "connection": "b7c6f099-cd44-4ecc-9cd8-e3fc59505bb1"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "SnowflakeSink",
+            "importSettings": {
+              "type": "SnowflakeImportCopyCommand"
+            },
+            "writeBehavior": "upsert",
+            "upsertSettings": {
+              "keys": [
+                "MOVEMENT_TYPE_KEY"
+              ]
+            },
+            "datasetSettings": {
+              "type": "SnowflakeTable",
+              "typeProperties": {
+                "schema": "MARTS",
+                "table": "DIM_MOVEMENT_TYPE",
+                "database": "SUPPLYCHAIN_DB"
+              },
+              "version": "1.1",
+              "schema": [],
+              "externalReferences": {
+                "connection": "6e050669-4838-4892-8f1d-4fcc8445566b"
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "movement_type_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "MOVEMENT_TYPE_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "movement_type_name",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "MOVEMENT_TYPE_NAME",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "movement_direction",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "MOVEMENT_DIRECTION",
+                  "physicalType": "VARCHAR"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": true
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "CDC_Dim_movement_type",
+        "dependsOn": [
+          {
+            "activity": "CDC_Dim_Department",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "DataWarehouseTable",
+              "typeProperties": {
+                "schema": "bronze",
+                "table": "dim_order"
+              },
+              "schema": [],
+              "connectionSettings": {
+                "name": "supplychain_wh",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "3919a738-9577-9278-4c8d-b5cb24d95046",
+                    "endpoint": "fbcek6n6junebmvlmss2obu6fm-xlmyqkdufk6ebpwfexvfppaq4i.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000"
+                  },
+                  "externalReferences": {
+                    "connection": "b7c6f099-cd44-4ecc-9cd8-e3fc59505bb1"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "SnowflakeSink",
+            "importSettings": {
+              "type": "SnowflakeImportCopyCommand"
+            },
+            "writeBehavior": "upsert",
+            "upsertSettings": {
+              "keys": [
+                "ORDER_KEY"
+              ]
+            },
+            "datasetSettings": {
+              "type": "SnowflakeTable",
+              "typeProperties": {
+                "schema": "MARTS",
+                "table": "DIM_ORDER",
+                "database": "SUPPLYCHAIN_DB"
+              },
+              "version": "1.1",
+              "schema": [],
+              "externalReferences": {
+                "connection": "6e050669-4838-4892-8f1d-4fcc8445566b"
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "order_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "ORDER_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "order_id",
+                  "type": "Int32",
+                  "physicalType": "int"
+                },
+                "sink": {
+                  "name": "ORDER_ID",
+                  "physicalType": "NUMBER",
+                  "scale": 0,
+                  "precision": 38
+                }
+              },
+              {
+                "source": {
+                  "name": "customer_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "CUSTOMER_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "order_geography_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "ORDER_GEOGRAPHY_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "shipping_mode_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "SHIPPING_MODE_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "delivery_status_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "DELIVERY_STATUS_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "order_status_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "ORDER_STATUS_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "order_date_key",
+                  "type": "Int32",
+                  "physicalType": "int"
+                },
+                "sink": {
+                  "name": "ORDER_DATE_KEY",
+                  "physicalType": "NUMBER",
+                  "scale": 0,
+                  "precision": 38
+                }
+              },
+              {
+                "source": {
+                  "name": "shipping_date_key",
+                  "type": "Int32",
+                  "physicalType": "int"
+                },
+                "sink": {
+                  "name": "SHIPPING_DATE_KEY",
+                  "physicalType": "NUMBER",
+                  "scale": 0,
+                  "precision": 38
+                }
+              },
+              {
+                "source": {
+                  "name": "payment_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "PAYMENT_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": true
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "CDC_Dim_order",
+        "dependsOn": [
+          {
+            "activity": "CDC_Dim_movement_type",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "DataWarehouseTable",
+              "typeProperties": {
+                "schema": "bronze",
+                "table": "dim_order_geography"
+              },
+              "schema": [],
+              "connectionSettings": {
+                "name": "supplychain_wh",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "3919a738-9577-9278-4c8d-b5cb24d95046",
+                    "endpoint": "fbcek6n6junebmvlmss2obu6fm-xlmyqkdufk6ebpwfexvfppaq4i.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000"
+                  },
+                  "externalReferences": {
+                    "connection": "b7c6f099-cd44-4ecc-9cd8-e3fc59505bb1"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "SnowflakeSink",
+            "importSettings": {
+              "type": "SnowflakeImportCopyCommand"
+            },
+            "writeBehavior": "upsert",
+            "upsertSettings": {
+              "keys": [
+                "ORDER_GEOGRAPHY_KEY"
+              ]
+            },
+            "datasetSettings": {
+              "type": "SnowflakeTable",
+              "typeProperties": {
+                "schema": "MARTS",
+                "table": "DIM_ORDER_GEOGRAPHY",
+                "database": "SUPPLYCHAIN_DB"
+              },
+              "version": "1.1",
+              "schema": [],
+              "externalReferences": {
+                "connection": "6e050669-4838-4892-8f1d-4fcc8445566b"
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "order_geography_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "ORDER_GEOGRAPHY_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "order_city",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "ORDER_CITY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "order_state",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "ORDER_STATE",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "order_country",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "ORDER_COUNTRY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "order_region",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "ORDER_REGION",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "order_zipcode",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "ORDER_ZIPCODE",
+                  "physicalType": "NUMBER",
+                  "scale": 0,
+                  "precision": 38
+                }
+              },
+              {
+                "source": {
+                  "name": "market",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "MARKET",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "latitude",
+                  "type": "Double",
+                  "physicalType": "float"
+                },
+                "sink": {
+                  "name": "LATITUDE",
+                  "physicalType": "FLOAT"
+                }
+              },
+              {
+                "source": {
+                  "name": "longitude",
+                  "type": "Double",
+                  "physicalType": "float"
+                },
+                "sink": {
+                  "name": "LONGITUDE",
+                  "physicalType": "FLOAT"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": true
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "CDC_Dim_Order_Geography",
+        "dependsOn": [
+          {
+            "activity": "CDC_Dim_order",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "DataWarehouseTable",
+              "typeProperties": {
+                "schema": "bronze",
+                "table": "dim_order_status"
+              },
+              "schema": [],
+              "connectionSettings": {
+                "name": "supplychain_wh",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "3919a738-9577-9278-4c8d-b5cb24d95046",
+                    "endpoint": "fbcek6n6junebmvlmss2obu6fm-xlmyqkdufk6ebpwfexvfppaq4i.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000"
+                  },
+                  "externalReferences": {
+                    "connection": "b7c6f099-cd44-4ecc-9cd8-e3fc59505bb1"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "SnowflakeSink",
+            "importSettings": {
+              "type": "SnowflakeImportCopyCommand"
+            },
+            "writeBehavior": "upsert",
+            "upsertSettings": {
+              "keys": [
+                "ORDER_STATUS_KEY"
+              ]
+            },
+            "datasetSettings": {
+              "type": "SnowflakeTable",
+              "typeProperties": {
+                "schema": "MARTS",
+                "table": "DIM_ORDER_STATUS",
+                "database": "SUPPLYCHAIN_DB"
+              },
+              "version": "1.1",
+              "schema": [],
+              "externalReferences": {
+                "connection": "6e050669-4838-4892-8f1d-4fcc8445566b"
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "order_status_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "ORDER_STATUS_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "order_status",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "ORDER_STATUS",
+                  "physicalType": "VARCHAR"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": true
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "CDC_Dim_Order_Status",
+        "dependsOn": [
+          {
+            "activity": "CDC_Dim_Order_Geography",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "DataWarehouseTable",
+              "typeProperties": {
+                "schema": "bronze",
+                "table": "dim_payment"
+              },
+              "schema": [],
+              "connectionSettings": {
+                "name": "supplychain_wh",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "3919a738-9577-9278-4c8d-b5cb24d95046",
+                    "endpoint": "fbcek6n6junebmvlmss2obu6fm-xlmyqkdufk6ebpwfexvfppaq4i.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000"
+                  },
+                  "externalReferences": {
+                    "connection": "b7c6f099-cd44-4ecc-9cd8-e3fc59505bb1"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "SnowflakeSink",
+            "importSettings": {
+              "type": "SnowflakeImportCopyCommand"
+            },
+            "writeBehavior": "upsert",
+            "upsertSettings": {
+              "keys": [
+                "PAYMENT_KEY"
+              ]
+            },
+            "datasetSettings": {
+              "type": "SnowflakeTable",
+              "typeProperties": {
+                "schema": "MARTS",
+                "table": "DIM_PAYMENT",
+                "database": "SUPPLYCHAIN_DB"
+              },
+              "version": "1.1",
+              "schema": [],
+              "externalReferences": {
+                "connection": "6e050669-4838-4892-8f1d-4fcc8445566b"
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "payment_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "PAYMENT_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "type",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "TYPE",
+                  "physicalType": "VARCHAR"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": true
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "CDC_Dim_Payment",
+        "dependsOn": [
+          {
+            "activity": "CDC_Dim_Order_Status",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "DataWarehouseTable",
+              "typeProperties": {
+                "schema": "bronze",
+                "table": "dim_product"
+              },
+              "schema": [],
+              "connectionSettings": {
+                "name": "supplychain_wh",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "3919a738-9577-9278-4c8d-b5cb24d95046",
+                    "endpoint": "fbcek6n6junebmvlmss2obu6fm-xlmyqkdufk6ebpwfexvfppaq4i.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000"
+                  },
+                  "externalReferences": {
+                    "connection": "b7c6f099-cd44-4ecc-9cd8-e3fc59505bb1"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "SnowflakeSink",
+            "importSettings": {
+              "type": "SnowflakeImportCopyCommand"
+            },
+            "writeBehavior": "upsert",
+            "upsertSettings": {
+              "keys": [
+                "PRODUCT_KEY"
+              ]
+            },
+            "datasetSettings": {
+              "type": "SnowflakeTable",
+              "typeProperties": {
+                "schema": "MARTS",
+                "table": "DIM_PRODUCT",
+                "database": "SUPPLYCHAIN_DB"
+              },
+              "version": "1.1",
+              "schema": [],
+              "externalReferences": {
+                "connection": "6e050669-4838-4892-8f1d-4fcc8445566b"
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "product_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "PRODUCT_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "product_name",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "PRODUCT_NAME",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "product_description",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "PRODUCT_DESCRIPTION",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "product_image",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "PRODUCT_IMAGE",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "product_status",
+                  "type": "Int32",
+                  "physicalType": "int"
+                },
+                "sink": {
+                  "name": "PRODUCT_STATUS",
+                  "physicalType": "NUMBER",
+                  "scale": 0,
+                  "precision": 38
+                }
+              },
+              {
+                "source": {
+                  "name": "category_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "CATEGORY_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "department_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "DEPARTMENT_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": true
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "CDC_Dim_Product",
+        "dependsOn": [
+          {
+            "activity": "CDC_Dim_Payment",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "DataWarehouseTable",
+              "typeProperties": {
+                "schema": "bronze",
+                "table": "dim_shipping_mode"
+              },
+              "schema": [],
+              "connectionSettings": {
+                "name": "supplychain_wh",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "3919a738-9577-9278-4c8d-b5cb24d95046",
+                    "endpoint": "fbcek6n6junebmvlmss2obu6fm-xlmyqkdufk6ebpwfexvfppaq4i.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000"
+                  },
+                  "externalReferences": {
+                    "connection": "b7c6f099-cd44-4ecc-9cd8-e3fc59505bb1"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "SnowflakeSink",
+            "importSettings": {
+              "type": "SnowflakeImportCopyCommand"
+            },
+            "writeBehavior": "upsert",
+            "upsertSettings": {
+              "keys": [
+                "SHIPPING_MODE_KEY"
+              ]
+            },
+            "datasetSettings": {
+              "type": "SnowflakeTable",
+              "typeProperties": {
+                "schema": "MARTS",
+                "table": "DIM_SHIPPING_MODE",
+                "database": "SUPPLYCHAIN_DB"
+              },
+              "version": "1.1",
+              "schema": [],
+              "externalReferences": {
+                "connection": "6e050669-4838-4892-8f1d-4fcc8445566b"
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "shipping_mode_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "SHIPPING_MODE_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "shipping_mode",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "SHIPPING_MODE",
+                  "physicalType": "VARCHAR"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": true
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "CDC_Dim_shipping_mode",
+        "dependsOn": [
+          {
+            "activity": "CDC_Dim_Product",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "DataWarehouseTable",
+              "typeProperties": {
+                "schema": "bronze",
+                "table": "dim_warehouse"
+              },
+              "schema": [],
+              "connectionSettings": {
+                "name": "supplychain_wh",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "3919a738-9577-9278-4c8d-b5cb24d95046",
+                    "endpoint": "fbcek6n6junebmvlmss2obu6fm-xlmyqkdufk6ebpwfexvfppaq4i.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000"
+                  },
+                  "externalReferences": {
+                    "connection": "b7c6f099-cd44-4ecc-9cd8-e3fc59505bb1"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "SnowflakeSink",
+            "importSettings": {
+              "type": "SnowflakeImportCopyCommand"
+            },
+            "writeBehavior": "upsert",
+            "upsertSettings": {
+              "keys": [
+                "WAREHOUSE_KEY"
+              ]
+            },
+            "datasetSettings": {
+              "type": "SnowflakeTable",
+              "typeProperties": {
+                "schema": "MARTS",
+                "table": "DIM_WAREHOUSE",
+                "database": "SUPPLYCHAIN_DB"
+              },
+              "version": "1.1",
+              "schema": [],
+              "externalReferences": {
+                "connection": "6e050669-4838-4892-8f1d-4fcc8445566b"
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "warehouse_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "WAREHOUSE_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "warehouse_name",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "WAREHOUSE_NAME",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "warehouse_type",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "WAREHOUSE_TYPE",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "warehouse_city",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "WAREHOUSE_CITY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "warehouse_country",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                },
+                "sink": {
+                  "name": "WAREHOUSE_COUNTRY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "warehouse_capacity",
+                  "type": "Int32",
+                  "physicalType": "int"
+                },
+                "sink": {
+                  "name": "WAREHOUSE_CAPACITY",
+                  "physicalType": "NUMBER",
+                  "scale": 0,
+                  "precision": 38
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": true
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "CDC_Dim_warehouse",
+        "dependsOn": [
+          {
+            "activity": "CDC_Dim_shipping_mode",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "DataWarehouseTable",
+              "typeProperties": {
+                "schema": "bronze",
+                "table": "fact_inventory_movement"
+              },
+              "schema": [],
+              "connectionSettings": {
+                "name": "supplychain_wh",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "3919a738-9577-9278-4c8d-b5cb24d95046",
+                    "endpoint": "fbcek6n6junebmvlmss2obu6fm-xlmyqkdufk6ebpwfexvfppaq4i.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000"
+                  },
+                  "externalReferences": {
+                    "connection": "b7c6f099-cd44-4ecc-9cd8-e3fc59505bb1"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "SnowflakeSink",
+            "importSettings": {
+              "type": "SnowflakeImportCopyCommand"
+            },
+            "writeBehavior": "upsert",
+            "upsertSettings": {
+              "keys": [
+                "INVENTORY_MOVEMENT_KEY"
+              ]
+            },
+            "datasetSettings": {
+              "type": "SnowflakeTable",
+              "typeProperties": {
+                "schema": "MARTS",
+                "table": "FACT_INVENTORY_MOVEMENT",
+                "database": "SUPPLYCHAIN_DB"
+              },
+              "version": "1.1",
+              "schema": [],
+              "externalReferences": {
+                "connection": "6e050669-4838-4892-8f1d-4fcc8445566b"
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "inventory_movement_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "INVENTORY_MOVEMENT_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "order_item_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "ORDER_ITEM_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "product_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "PRODUCT_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "warehouse_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "WAREHOUSE_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "movement_date_key",
+                  "type": "Int32",
+                  "physicalType": "int"
+                },
+                "sink": {
+                  "name": "MOVEMENT_DATE_KEY",
+                  "physicalType": "NUMBER",
+                  "scale": 0,
+                  "precision": 38
+                }
+              },
+              {
+                "source": {
+                  "name": "movement_type_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "MOVEMENT_TYPE_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "quantity_moved",
+                  "type": "Int32",
+                  "physicalType": "int"
+                },
+                "sink": {
+                  "name": "QUANTITY_MOVED",
+                  "physicalType": "NUMBER",
+                  "scale": 0,
+                  "precision": 38
+                }
+              },
+              {
+                "source": {
+                  "name": "unit_cost_at_movement",
+                  "type": "Decimal",
+                  "physicalType": "decimal",
+                  "scale": 2,
+                  "precision": 18
+                },
+                "sink": {
+                  "name": "UNIT_COST_AT_MOVEMENT",
+                  "physicalType": "NUMBER",
+                  "scale": 2,
+                  "precision": 18
+                }
+              },
+              {
+                "source": {
+                  "name": "stock_on_hand_after_movement",
+                  "type": "Int32",
+                  "physicalType": "int"
+                },
+                "sink": {
+                  "name": "STOCK_ON_HAND_AFTER_MOVEMENT",
+                  "physicalType": "NUMBER",
+                  "scale": 0,
+                  "precision": 38
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": true
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "CDC_fact_inventory_movement",
+        "dependsOn": [
+          {
+            "activity": "CDC_Dim_warehouse",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "DataWarehouseTable",
+              "typeProperties": {
+                "schema": "bronze",
+                "table": "fact_order_item"
+              },
+              "schema": [],
+              "connectionSettings": {
+                "name": "supplychain_wh",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "3919a738-9577-9278-4c8d-b5cb24d95046",
+                    "endpoint": "fbcek6n6junebmvlmss2obu6fm-xlmyqkdufk6ebpwfexvfppaq4i.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000"
+                  },
+                  "externalReferences": {
+                    "connection": "b7c6f099-cd44-4ecc-9cd8-e3fc59505bb1"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "SnowflakeSink",
+            "importSettings": {
+              "type": "SnowflakeImportCopyCommand"
+            },
+            "writeBehavior": "upsert",
+            "upsertSettings": {
+              "keys": [
+                "ORDER_ITEM_KEY"
+              ]
+            },
+            "datasetSettings": {
+              "type": "SnowflakeTable",
+              "typeProperties": {
+                "schema": "MARTS",
+                "table": "FACT_ORDER_ITEM",
+                "database": "SUPPLYCHAIN_DB"
+              },
+              "version": "1.1",
+              "schema": [],
+              "externalReferences": {
+                "connection": "6e050669-4838-4892-8f1d-4fcc8445566b"
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "order_item_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "ORDER_ITEM_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "order_item_id",
+                  "type": "Int32",
+                  "physicalType": "int"
+                },
+                "sink": {
+                  "name": "ORDER_ITEM_ID",
+                  "physicalType": "NUMBER",
+                  "scale": 0,
+                  "precision": 38
+                }
+              },
+              {
+                "source": {
+                  "name": "order_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "ORDER_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "product_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "PRODUCT_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "product_price",
+                  "type": "Decimal",
+                  "physicalType": "decimal",
+                  "scale": 2,
+                  "precision": 18
+                },
+                "sink": {
+                  "name": "PRODUCT_PRICE",
+                  "physicalType": "NUMBER",
+                  "scale": 2,
+                  "precision": 18
+                }
+              },
+              {
+                "source": {
+                  "name": "sales",
+                  "type": "Decimal",
+                  "physicalType": "decimal",
+                  "scale": 2,
+                  "precision": 18
+                },
+                "sink": {
+                  "name": "SALES",
+                  "physicalType": "NUMBER",
+                  "scale": 2,
+                  "precision": 18
+                }
+              },
+              {
+                "source": {
+                  "name": "sales_per_customer",
+                  "type": "Decimal",
+                  "physicalType": "decimal",
+                  "scale": 2,
+                  "precision": 18
+                },
+                "sink": {
+                  "name": "SALES_PER_CUSTOMER",
+                  "physicalType": "NUMBER",
+                  "scale": 2,
+                  "precision": 18
+                }
+              },
+              {
+                "source": {
+                  "name": "order_item_quantity",
+                  "type": "Int32",
+                  "physicalType": "int"
+                },
+                "sink": {
+                  "name": "ORDER_ITEM_QUANTITY",
+                  "physicalType": "NUMBER",
+                  "scale": 0,
+                  "precision": 38
+                }
+              },
+              {
+                "source": {
+                  "name": "order_item_product_price",
+                  "type": "Decimal",
+                  "physicalType": "decimal",
+                  "scale": 2,
+                  "precision": 18
+                },
+                "sink": {
+                  "name": "ORDER_ITEM_PRODUCT_PRICE",
+                  "physicalType": "NUMBER",
+                  "scale": 2,
+                  "precision": 18
+                }
+              },
+              {
+                "source": {
+                  "name": "order_item_discount",
+                  "type": "Decimal",
+                  "physicalType": "decimal",
+                  "scale": 2,
+                  "precision": 18
+                },
+                "sink": {
+                  "name": "ORDER_ITEM_DISCOUNT",
+                  "physicalType": "NUMBER",
+                  "scale": 2,
+                  "precision": 18
+                }
+              },
+              {
+                "source": {
+                  "name": "order_item_discount_rate",
+                  "type": "Decimal",
+                  "physicalType": "decimal",
+                  "scale": 4,
+                  "precision": 18
+                },
+                "sink": {
+                  "name": "ORDER_ITEM_DISCOUNT_RATE",
+                  "physicalType": "NUMBER",
+                  "scale": 4,
+                  "precision": 18
+                }
+              },
+              {
+                "source": {
+                  "name": "order_item_total",
+                  "type": "Decimal",
+                  "physicalType": "decimal",
+                  "scale": 2,
+                  "precision": 18
+                },
+                "sink": {
+                  "name": "ORDER_ITEM_TOTAL",
+                  "physicalType": "NUMBER",
+                  "scale": 2,
+                  "precision": 18
+                }
+              },
+              {
+                "source": {
+                  "name": "order_item_profit_ratio",
+                  "type": "Decimal",
+                  "physicalType": "decimal",
+                  "scale": 4,
+                  "precision": 18
+                },
+                "sink": {
+                  "name": "ORDER_ITEM_PROFIT_RATIO",
+                  "physicalType": "NUMBER",
+                  "scale": 4,
+                  "precision": 18
+                }
+              },
+              {
+                "source": {
+                  "name": "order_profit_per_order",
+                  "type": "Decimal",
+                  "physicalType": "decimal",
+                  "scale": 2,
+                  "precision": 18
+                },
+                "sink": {
+                  "name": "ORDER_PROFIT_PER_ORDER",
+                  "physicalType": "NUMBER",
+                  "scale": 2,
+                  "precision": 18
+                }
+              },
+              {
+                "source": {
+                  "name": "benefit_per_order",
+                  "type": "Decimal",
+                  "physicalType": "decimal",
+                  "scale": 2,
+                  "precision": 18
+                },
+                "sink": {
+                  "name": "BENEFIT_PER_ORDER",
+                  "physicalType": "NUMBER",
+                  "scale": 2,
+                  "precision": 18
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": true
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "CDC_Fact_order_item",
+        "dependsOn": [
+          {
+            "activity": "CDC_fact_inventory_movement",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "DataWarehouseSource",
+            "partitionOption": "None",
+            "queryTimeout": "02:00:00",
+            "datasetSettings": {
+              "type": "DataWarehouseTable",
+              "typeProperties": {
+                "schema": "bronze",
+                "table": "fact_shipping_performance"
+              },
+              "schema": [],
+              "connectionSettings": {
+                "name": "supplychain_wh",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "3919a738-9577-9278-4c8d-b5cb24d95046",
+                    "endpoint": "fbcek6n6junebmvlmss2obu6fm-xlmyqkdufk6ebpwfexvfppaq4i.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000"
+                  },
+                  "externalReferences": {
+                    "connection": "b7c6f099-cd44-4ecc-9cd8-e3fc59505bb1"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "SnowflakeSink",
+            "importSettings": {
+              "type": "SnowflakeImportCopyCommand"
+            },
+            "writeBehavior": "upsert",
+            "upsertSettings": {
+              "keys": [
+                "SHIPPING_PERFORMANCE_KEY"
+              ]
+            },
+            "datasetSettings": {
+              "type": "SnowflakeTable",
+              "typeProperties": {
+                "schema": "MARTS",
+                "table": "FACT_SHIPPING_PERFORMANCE",
+                "database": "SUPPLYCHAIN_DB"
+              },
+              "version": "1.1",
+              "schema": [],
+              "externalReferences": {
+                "connection": "6e050669-4838-4892-8f1d-4fcc8445566b"
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "shipping_performance_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "SHIPPING_PERFORMANCE_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "order_key",
+                  "type": "String",
+                  "physicalType": "varchar",
+                  "length": "400"
+                },
+                "sink": {
+                  "name": "ORDER_KEY",
+                  "physicalType": "VARCHAR"
+                }
+              },
+              {
+                "source": {
+                  "name": "days_for_shipping_real",
+                  "type": "Int32",
+                  "physicalType": "int"
+                },
+                "sink": {
+                  "name": "DAYS_FOR_SHIPPING_REAL",
+                  "physicalType": "NUMBER",
+                  "scale": 0,
+                  "precision": 38
+                }
+              },
+              {
+                "source": {
+                  "name": "days_for_shipment_scheduled",
+                  "type": "Int32",
+                  "physicalType": "int"
+                },
+                "sink": {
+                  "name": "DAYS_FOR_SHIPMENT_SCHEDULED",
+                  "physicalType": "NUMBER",
+                  "scale": 0,
+                  "precision": 38
+                }
+              },
+              {
+                "source": {
+                  "name": "delay_between_real_scheduled",
+                  "type": "Int32",
+                  "physicalType": "int"
+                },
+                "sink": {
+                  "name": "DELAY_BETWEEN_REAL_SCHEDULED",
+                  "physicalType": "NUMBER",
+                  "scale": 0,
+                  "precision": 38
+                }
+              },
+              {
+                "source": {
+                  "name": "late_delivery_risk",
+                  "type": "Int32",
+                  "physicalType": "int"
+                },
+                "sink": {
+                  "name": "LATE_DELIVERY_RISK",
+                  "physicalType": "NUMBER",
+                  "scale": 0,
+                  "precision": 38
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": true
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "CDC_fact_shipping_performance",
+        "dependsOn": [
+          {
+            "activity": "CDC_Fact_order_item",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
