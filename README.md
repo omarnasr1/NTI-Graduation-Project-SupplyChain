@@ -13,6 +13,7 @@ End-to-end supply chain analytics Solution spanning batch ETL, real-time streami
 - [Data Model — Star Schema](#data-model--star-schema)
 - [Pipeline 1 — Batch ETL (AWS / Snowflake)](#pipeline-1--batch-etl-aws--snowflake)
 - [Pipeline 2 — Real-Time Streaming (Kafka)](#pipeline-2--real-time-streaming-kafka)
+- [Microsoft Fabric workspace](#Microsoft-Fabric-workspace)
 - [Pipeline 3 — Batch ETL (Microsoft Fabric)](#pipeline-3--batch-etl-microsoft-fabric)
 - [Pipeline 4 — Real-Time Streaming (Microsoft Fabric)](#pipeline-4--real-time-streaming-microsoft-fabric)
 - [Pipeline 5 — Cross-Platform Sync (Fabric → Snowflake CDC)](#pipeline-5--cross-platform-sync-fabric--snowflake-cdc)
@@ -238,7 +239,11 @@ Parallel to the batch path, captures new orders as they arrive using Apache Kafk
 **Role in pipeline:** Live API → Kafka → per-order CSV → S3 → Snowflake raw table. Near-real-time order ingestion alongside the bulk historical batch load. Both paths converge on `raw_supplyChain`, feeding the shared dbt project.
 
 ---
+## Microsoft Fabric workspace 
 
+<img src="Microsoft%20Fabric/SupplyChain%20Wroksapce.png" alt="SupplyChain Workspace" width="900">
+
+---
 ## Pipeline 3 — Batch ETL (Microsoft Fabric)
 
 A Fabric Data Factory pipeline re-implements the batch path natively on Microsoft Fabric, replacing S3 + Snowflake with Lakehouse + Warehouse, following a standard **medallion architecture** (Bronze → Silver → Gold), while reusing the exact same dbt project for the gold layer.
